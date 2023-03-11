@@ -1,0 +1,131 @@
+{
+    "HEADER": {
+        "SEARCH": "بحث ...",
+        "WELCOME": "مرحبا",
+        "Notifications": "التنبيهات",
+        "View All": "مشاهدة الجميع",
+        "NOTIFICATIONS": {
+            "TITLE": "التنبيهات",
+            "VIEW_ALL": "مشاهدة الجميع",
+            "LOAD_MORE": "مشاهدة المزيد",
+            "FIRST": {
+                "TITLE": "التنبيه الأول",
+                "TEXT": "تنبيه تمت كتابته",
+                "TIME": "منذ 3 دقائق"
+            },
+            "SECOND": {
+                "TITLE": "التنبيه الأول",
+                "TEXT": "تنبيه تمت كتابته",
+                "TIME": "منذ 1 ساعه"
+            }
+        },
+        "EXTRA_PAGES": {
+            "TITLE": "الصفحات الرئيسية"
+        },
+        "LOGIN": {
+            "PROFILE": "الملف الشخصي",
+            "MESSAGES": "الرسائل",
+            "LOGOUT": "تسجيل الخروج"
+        }
+    },
+    "ThemeCustomizer": "تغير الشكل العام",
+    "RIGHTSIDEBAR": {
+        "LAYOUT": {
+            "TEXT": "شكل القائمة",
+            "LIST": {
+                "VERTICAL": "رأسي",
+                "HORIZONTAL": "أفقي"
+            }
+        },
+        "LAYOUTMODE": {
+            "TEXT": "شكل النظام",
+            "LIST": {
+                "LIGHT": "مضئ",
+                "DARK": "معتم"
+            }
+        },
+        "LAYOUTWIDTH": {
+            "TEXT": "حجم النظام",
+            "LIST": {
+                "FLUID": "واسع",
+                "BOXED": "مضبوط"
+            }
+        },
+        "LAYOUTPOSITION": {
+            "TEXT": "مكان القائمة",
+            "LIST": {
+                "FIXED": "متحركة",
+                "SCROLLABLE": "ثابتة"
+            }
+        },
+        "TOPBARCOLOR": {
+            "TEXT": "لون القائمة العلوية",
+            "LIST": {
+                "LIGHT": "ابيض",
+                "DARK": "اسود"
+            }
+        },
+        "SIDEBARSIZE": {
+            "TEXT": "حجم القائمة الجانبية",
+            "LIST": {
+                "DEFAULT": "عادي",
+                "COMPACT": "مدمج",
+                "SMALL": "صغير"
+            }
+        },
+        "SIDEBARCOLOR": {
+            "TEXT": "لون القائمة الجانبية",
+            "LIST": {
+                "LIGHT": "ابيض",
+                "DARK": "اسود",
+                "BRAND": "ازرق"
+            }
+        }
+    },
+    "MENUITEMS": {
+        "MENU": {
+            "TEXT": "المعلومات العامه"
+        },
+        "DASHBOARDS": {
+            "TEXT": "اللوحه الرئيسية"
+        },
+        "HR": {
+          "TEXT": "موارد بشرية",
+          "LIST": {
+            "PAGES": "الصفحات",
+            "SETTINGS":"الاعدادات",
+            "REPORTS":"التقارير",
+            "EMPLOYEEREPORT":"بيانات الموظفين",
+            "ACCONTREPORT":"بيانات الحسابات",
+            "STORE":"المخازن",
+            "Enterprise":"المؤسسة",
+            "BRANCH":"الفروع",
+            "MANAGEMENTS":"الإدارات",
+            "JobApplication":"التقدم لوظيفة",
+            "SUB": {
+              "INBOX": "انبوكس",
+              "READEMAIL": "البريد الالكتروني"
+            }
+          }
+        }
+    },
+    "add":"إضافة",
+    "edit":"تعديل",
+    "delete":"حذف",
+    "view":"عرض",
+    "search":"بحث",
+    "save":"حفظ",
+    "cancel":"عودة",
+    "LookUps":"تعريفات عامه",
+    "Organization":"المؤسسة",
+    "Mamagements":"الإدارات",
+    "Departments":"الأقسام",
+    "Jobs":"الوظائف",
+    "name":"الإسم",
+    "nameAr":"الإسم بالعربى",
+    "nameEn":"الإسم بالانجليزي",
+    "parent":"تابع إلى",
+    "placeholderSelect":"إختر",
+    "required":"حقل مطلوب"
+
+}

@@ -1,0 +1,89 @@
+<!-- ========== Left Sidebar Start ========== -->
+<!-- <div class="vertical-menu">
+  <div data-simplebar class="h-100">
+    <ngx-simplebar style="max-height: 100vh">
+      <div id="sidebar-menu">
+        <ul class="metismenu list-unstyled" id="side-menu">
+          <ng-container *ngFor="let item of newMenuItems">
+            <li>
+              <a [routerLink]="item.link" *ngIf="item.type==='group'" class="side-nav-link-ref"
+                routerLinkActive="active">
+                <i class="bx {{ item.icon }}" *ngIf="item.icon"></i>
+                <span> {{ item.nameAr | translate }}</span>
+              </a>
+              <ul *ngIf="item.type==='group'" class="sub-menu" aria-expanded="false">
+                <li *ngFor="let subitem of newMenuItems">
+                  <a [routerLink]="subitem.link" *ngIf="item.id===subitem.parentId && subitem.type==='collapse'" class="side-nav-link-ref"
+                    [attr.data-parent]="subitem.parentId" routerLinkActive="active">
+                    {{ subitem.nameAr | translate}}
+                  </a>
+                  <ul *ngIf="subitem.type==='collapse'" class="sub-menu" aria-expanded="false">
+                    <li *ngFor="let subSubitem of newMenuItems">
+                      <a [attr.data-parent]="subSubitem.parentId" *ngIf="subitem.id===subSubitem.parentId && subSubitem.type==='item'" [routerLink]="subSubitem.link"
+                        routerLinkActive="active" class="side-nav-link-ref">
+                        {{ subSubitem.nameAr | translate }}
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </ngx-simplebar>
+  </div>
+</div> -->
+
+<!-- ========== Left Sidebar Start ========== -->
+<div class="vertical-menu">
+  <div data-simplebar class="h-100">
+    <ngx-simplebar style="max-height: 100vh">
+
+      <div id="sidebar-menu">
+
+        <ul class="metismenu list-unstyled" id="side-menu">
+          <ng-container *ngFor="let item of apiMenu">
+
+
+
+            <li>
+              <a *ngIf="hasItems(item)" href="javascript:void(0);" class="is-parent">
+                <i class="{{item.icon}}" *ngIf="item.icon"></i>
+                <span> {{this.baseService.isRTL? item.nameAr: item.nameEn | translate}}</span>
+              </a> 
+
+              <a  *ngIf="!hasItems(item)" class="side-nav-link-ref" routerLinkActive="active">
+                <i class="{{ item.icon }}" *ngIf="item.icon"></i>
+                <span> {{this.baseService.isRTL? item.nameAr: item.nameEn | translate}}</span>
+              </a>
+
+              <ul *ngIf="hasItems(item)" class="sub-menu" aria-expanded="false">
+                <li *ngFor="let subitem of item.submenu">
+                  <a  *ngIf="!hasItems(subitem)" class="side-nav-link-ref"
+                    [attr.data-parent]="subitem.parentId" routerLinkActive="active">
+                    {{this.baseService.isRTL? subitem.nameAr: subitem.nameEn | translate}}
+                  </a>
+                  <a *ngIf="hasItems(subitem)" class="side-nav-link-a-ref has-arrow" href="javascript:void(0);"
+                    [attr.data-parent]="subitem.parentId">
+                    {{this.baseService.isRTL? subitem.nameAr: subitem.nameEn | translate}}
+                  </a>
+
+
+                  <ul *ngIf="hasItems(subitem)" class="sub-menu mm-collapse" aria-expanded="false">
+                    <li *ngFor="let subSubitem of subitem.submenu">
+                      <a [attr.data-parent]="subSubitem.parentId" [routerLink]="subSubitem.path"
+                        routerLinkActive="active" class="side-nav-link-ref">
+                        {{this.baseService.isRTL? subSubitem.nameAr: subSubitem.nameEn | translate}}
+                      </a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </div>
+    </ngx-simplebar>
+  </div>
+</div>
