@@ -1,0 +1,66 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card">
+          <div class="card-header">
+            <div class=" btn-showcase">
+              <button type="button" class="btn btn-success" [routerLink]="['/page/item', 'add', this.itemId ]">
+                <i class="fa fa-plus"></i> {{'add' | translate}}
+              </button>
+              <button type="button" [class]="this.itemId === 0 ? 'btn btn-light' : 'btn btn-info'"
+                [routerLink]="['/page/item', 'edit', this.itemId ]" [disabled]="this.itemId===0">
+                <i class="fa fa-edit"></i> {{'edit' | translate}}
+              </button>
+              <button type="button" [class]="this.itemId === 0 ? 'btn btn-light' : 'btn btn-danger'"
+                (click)="deleteRow()" [disabled]="this.itemId===0">
+                <i class="fa fa-trash"></i> {{'delete' | translate}}
+              </button>
+            </div>
+          </div>
+          <form class="form theme-form">
+            <div class="card-body">
+              <dx-data-grid #gridBranches id="gridBranches" [dataSource]="items" keyExpr="id" [showBorders]="true"
+                [showRowLines]="true" [rtlEnabled]="this.baseService.isRTL" [allowColumnReordering]="true"
+                [allowColumnResizing]="true" [columnAutoWidth]="true" [columnHidingEnabled]="true"
+                 [height]="height"
+                (onSelectionChanged)="onSelectionChanged($event)" (onInitialized)="onInitialized($event)"
+                (onRowRemoving)="onRowRemoving($event)">
+                <dxo-search-panel [visible]="true" ></dxo-search-panel>
+                <dxo-selection mode="single"></dxo-selection>
+                <dxo-paging [pageSize]="10"></dxo-paging>
+                <dxo-pager [allowedPageSizes]="[10, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true"
+                  [showPageSizeSelector]="true" [visible]="true">
+                </dxo-pager>
+                <dxo-group-panel [visible]="true" ></dxo-group-panel>
+                <dxo-sorting mode="multiple"></dxo-sorting>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-header-filter [visible]="true"></dxo-header-filter>
+                <dxo-export [enabled]="true" fileName="Data" [allowExportSelectedData]="false"></dxo-export>
+
+                <dxi-column dataField="code" caption="{{'item.code' |translate}}"></dxi-column>
+                <dxi-column [dataField]="this.baseService.isRTL?'nameAr':'nameAr'" caption="{{'item.name' | translate}}"></dxi-column>
+
+                  <!-- <dxi-column dataField="itemTypeId"  caption="{{'item.itemTypeName' | translate}}" >
+                    <dxo-lookup [dataSource]="itemTypes" [class]="this.baseService.isRTL? 'text right':'text left'" [displayExpr]="this.baseService.isRTL? 'nameAr':'nameEn'" valueExpr="id">
+                    </dxo-lookup>
+                  </dxi-column>
+                  <dxi-column dataField="itemUnitId"  caption="{{'item.itemUnitName' | translate}}" >
+                    <dxo-lookup [dataSource]="itemUnit" [class]="this.baseService.isRTL? 'text right':'text left'" [displayExpr]="this.baseService.isRTL? 'nameAr':'nameEn'" valueExpr="id">
+                    </dxo-lookup>
+                  </dxi-column> -->
+
+                <dxi-column dataField="price" caption="{{'item.price' | translate}}"></dxi-column>
+                <dxi-column dataField="quantity" caption="{{'item.quantity' | translate}}"></dxi-column>
+
+                <dxo-editing>
+                  <dxo-texts confirmDeleteMessage="{{'confirmDeleteMessage' | translate}}"
+                    confirmDeleteTitle="{{'confirmDeleteTitle' | translate}}">
+                  </dxo-texts>
+                </dxo-editing>
+              </dx-data-grid>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

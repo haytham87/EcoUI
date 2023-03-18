@@ -11,9 +11,27 @@ import { NgbDropdownModule,
 import { AgmCoreModule } from '@agm/core';
 
 import {
-  DxAutocompleteModule, DxButtonModule, DxCheckBoxModule, DxDataGridModule, DxDropDownBoxModule, DxListModule, DxPopupModule,
-  DxScrollViewModule, DxSelectBoxModule, DxTagBoxModule, DxTemplateModule, DxTextAreaModule, DxTreeListModule, DxTreeViewModule,
-  DxTextBoxModule, DxFormModule, DxDateBoxModule
+  DxTreeListModule,
+  DxDataGridModule,
+  DxSelectBoxModule,
+  DxCheckBoxModule,
+  DxPopupModule,
+  DxButtonModule,
+  DxTreeViewModule,
+  DxDropDownBoxModule,
+  DxTagBoxModule,
+  DxListModule,
+  DxScrollViewModule,
+  DxTextAreaModule,
+  DxTemplateModule,
+  DxTooltipModule,
+  DxDateBoxModule,
+  DxDropDownButtonModule,
+  DxHtmlEditorModule,
+  DxValidatorModule,
+  DxValidationSummaryModule,
+  DxTextBoxModule,DxAutocompleteModule,
+  DxFormModule
 } from 'devextreme-angular';
 
 import { PagesRoutingModule } from './pages-routing.module';
@@ -38,6 +56,12 @@ import { ArabicCharDirective } from '../core/directives/arabicChar.directive';
 import { AlphabetOnlyDirective } from '../core/directives/alphabet-only.directive';
 import { EnglishCharDirective } from '../core/directives/englishChar.directive';
 import { SafePipe } from '../core/pipe/safe.pipe';
+import { CategoryComponent } from './mainData/category/category.component';
+import { ItemsComponent } from './mainData/items/items.component';
+import { ItemComponent } from './mainData/item/item.component';
+import { CategoriesComponent } from './mainData/categories/categories.component';
+import { BrandsComponent } from './mainData/brands/brands.component';
+import { BrandComponent } from './mainData/brand/brand.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +78,12 @@ import { SafePipe } from '../core/pipe/safe.pipe';
     BasicComponent,
     ChartsComponent,
     UiComponent,
+    CategoryComponent,
+    ItemsComponent,
+    ItemComponent,
+    CategoriesComponent,
+    BrandsComponent,
+    BrandComponent,
   ],
   imports: [
     CommonModule,
