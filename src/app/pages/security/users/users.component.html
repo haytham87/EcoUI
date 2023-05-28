@@ -1,0 +1,266 @@
+<section class="content">
+    <div class="container-fluid">
+      <div class="page-title">
+        <span>
+          <i class="fas fa-users"></i>
+          <strong class="mx-2">{{"Users" | translate}}</strong>
+        </span>
+        <div class="example-button-row d-none d-sm-block">
+          <div #headerActions>
+            <button #myB mat-raised-button type="button" class="btn btn-success" [routerLink]="['/page/user', 'add', 0 ]"
+              accesskey="add">
+              <i class=" fa fa-plus"></i> {{'add' | translate}}
+            </button>
+  
+            <button mat-raised-button type="button" class="btn btn_search" (click)="openSearchPop()" style="color: #FFF;"
+            accessKey="search">
+            <i class=" fa fa-search" style="color: #FFF !important;"></i> {{'search' | translate}}
+          </button>
+  
+          <button mat-raised-button type="button" class="btn btn_removesearch" style="color: #FFF;" *ngIf="removeSearch" (click)="removeSearchs()"
+          accessKey="search">
+          <i class="fas fa-search-minus" style="color: #FFF !important;"></i> {{'removeSearch' | translate}}
+          </button>
+          </div>
+        </div>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="body">
+              <form class="form">
+                <dx-data-grid #gridInstance id="gridData" [dataSource]="itemsDataSource" keyExpr="id" [showBorders]="true"
+                  [showRowLines]="true" [rtlEnabled]="this.baseService.isRTL" [allowColumnReordering]="true"
+                  [allowColumnResizing]="true" [columnAutoWidth]="true" [columnHidingEnabled]="true" [height]="height"
+                  (onInitialized)="grid_onInitialized($event)" (onSelectionChanged)="onSelectionChanged($event)"
+                  (onCellPrepared)="onCellPrepared($event)" (onEditorPreparing)="onEditorPreparing($event)"
+                  (onRowUpdating)="onRowUpdating($event)" (onRowRemoving)="onRowRemoving($event)"
+                  (onRowInserting)="onRowInserting($event)">
+                  <dxo-search-panel [visible]="true"></dxo-search-panel>
+                  <dxo-selection mode="single"></dxo-selection>
+                  <dxo-paging [pageSize]="10"></dxo-paging>
+                  <dxo-pager [allowedPageSizes]="[5,10, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true"
+                    [showPageSizeSelector]="true" [visible]="true">
+                  </dxo-pager>
+                  <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
+                  <dxo-sorting mode="multiple"></dxo-sorting>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-header-filter [visible]="true"></dxo-header-filter>
+                  <dxi-column dataField="identityNo" caption="{{'identityNo'|translate}}"></dxi-column>
+                  <dxi-column dataField="nameAr" caption="{{'name'|translate}}"></dxi-column>
+                  <dxi-column dataField="username" caption="{{'security.userName' | translate}}">
+                    <dxi-validation-rule type="required" message="{{'required' | translate}}">
+                    </dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="rank" caption="{{'rank'|translate}}"></dxi-column>
+                  <dxi-column dataField="unitName" caption="{{'unit'|translate}}"></dxi-column>
+  
+                  <dxi-column dataField="password" [visible]="false" [allowEditing]="true"
+                    [formItem]="{visible: showPasswordField}" caption="{{'security.password' | translate}}">
+                    <dxi-validation-rule type="required" message="{{'required' | translate}}">
+                    </dxi-validation-rule>
+                  </dxi-column>
+                  <!-- <dxi-column dataField="mobile" caption="{{'security.mobile' | translate}}" dataType="number"
+                    [editorOptions]="{ placeholder: '966xxxxxxxxx' }">
+                    <dxi-validation-rule type="required" message="{{'required' | translate}}">
+                    </dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" max="12" message="{{'max9' | translate}}">
+                    </dxi-validation-rule>
+                    <dxi-validation-rule type="stringLength" min="12" message="{{'min9' | translate}}">
+                    </dxi-validation-rule>
+                  </dxi-column> -->
+                  <!-- <dxi-column   dataField="edit" [allowFiltering]="false" [allowSorting]="false" cellTemplate="actions"
+                    caption="{{'edit' | translate}}" width="10%"></dxi-column> -->
+                  <!-- <dxi-column *ngIf="delete==true" dataField="delete" [allowFiltering]="false" [allowSorting]="false" cellTemplate="cellDelete"
+                    caption="{{'delete' | translate}}" width="10%"></dxi-column> -->
+  
+                  <!-- <dxi-column dataField="isDisabled" cellTemplate="cellActive" [allowFiltering]="false"
+                    [allowSorting]="false" caption="{{'security.isActive' | translate}}"></dxi-column> -->
+  
+                    <dxi-column dataField="disabledInfo" caption="{{'security.isActive'|translate}}"></dxi-column>
+  
+                    <dxi-column [allowFiltering]="false" [allowSorting]="false" cellTemplate="actions"
+                    caption="{{'actions' | translate}}">
+                  </dxi-column>
+  
+  
+                  <!-- <div *dxTemplate="let data of 'cellEdit'" style="text-align: center;">
+                    <i class="far fa-edit" style="cursor: pointer;" (click)="edit_user(data.value)"
+                    accessKey="edit" title="{{'edit' | translate}}"></i>
+                  </div> -->
+  
+                  <!-- <div  *dxTemplate="let data of 'actions'" style="text-align: center;">
+  
+                    </div> -->
+                  <!-- <div *dxTemplate="let data of 'cellDelete'" style="text-align: center;">
+                    <i *ngIf="data.data.isRegister!==true" class="far fa-trash-alt" style="cursor: pointer;"
+                      (click)="delete_user(data.value)" title="{{'delete' | translate}}"></i>
+                  </div> -->
+                  <!-- <div *dxTemplate="let data of 'cellActive'">
+                    <p *ngIf="data.data.isDisabled === false"><span class="green-dot"></span>{{'active' | translate}}</p>
+                    <p *ngIf="data.data.isDisabled === true"><span class="red-dot"></span>{{'disable' | translate}}</p>
+                  </div> -->
+  
+                  <div *dxTemplate="let data of 'actions'" style="text-align: center;font-size: 20px;color: #00a886;">
+                    <i class="far fa-edit" style="cursor: pointer; margin-left: 15px" (click)="edit_user(data.data.id)"
+                      accessKey="edit" title="{{'edit' | translate}}"></i>
+  
+                      <i  class="fa fa-braille" style="cursor: pointer;"
+                      accessKey="roleAccess" (click)="openPopup()" title="{{'security.roles' | translate}}"></i>
+                  </div>
+  
+                  <!-- <div *dxTemplate="let data of 'actions'" style="text-align: center;font-size: 20px;color: #00a886;">
+                    <i class="far fa-edit" style="cursor: pointer; margin-left: 15px" (click)="edit_user(data.data.id)"
+                      accessKey="edit" title="{{'edit' | translate}}"></i>
+  
+                    <i  class="fa fa-braille" style="cursor: pointer;"
+                    accessKey="groups"(click)="openPopup()" title="{{'security.roles' | translate}}"></i>
+                  </div> -->
+  
+                  <div *dxTemplate="let cell of 'editCellTemplate'">
+                    <dx-tag-box [dataSource]="this.roles" [(value)]="cell.data.roleIds" displayExpr="nameAr"
+                      valueExpr="id" [readOnly]=true>
+                    </dx-tag-box>
+                  </div>
+  
+                  <dxo-editing mode="popup" [useIcons]="true" [allowAdding]="false" [allowUpdating]="false"
+                    [allowDeleting]="false">
+                    <dxo-texts saveRowChanges="{{'save' | translate}}" cancelRowChanges="{{'cancel' | translate}}"
+                      confirmDeleteMessage="{{'confirmDeleteMessage' | translate}}"
+                      confirmDeleteTitle="{{'confirmDeleteTitle' | translate}}">
+                    </dxo-texts>
+                    <dxo-popup title="{{'security.info' | translate}}" [showTitle]="true" [height]="400"
+                      [position]="{ my: 'center', at: 'center' }">
+                    </dxo-popup>
+                  </dxo-editing>
+                </dx-data-grid>
+                <dx-popup class="popup" [rtlEnabled]="this.baseService.isRTL" [showTitle]="true"
+                  title="{{'security.userRoles' | translate}}" [dragEnabled]="false" [(visible)]="popupVisible"
+                  [maxWidth]="'50.5%'" [maxHeight]="'auto'">
+                  <div class="card" style="font-family: 'JF-Flat' !important">
+                    <div class="card-header" style="padding-top: 0;">
+                      <span>
+                        <strong>{{"Groups" | translate}}</strong>
+                      </span>
+                    </div>
+                    <!-- <div class="body">
+                      <dx-list #list [dataSource]="roleDataSourceItems" [height]="userHight" [searchEnabled]="true"
+                        searchExpr="nameAr" searchMode="contains" [selectionMode]="'all'" [selectAllMode]="'page'"
+                        [showSelectionControls]="true" [selectedItemKeys]="selectedItems" itemTemplate="data"  [useNativeScrolling]="true"  [scrollByThumb]="true">
+                        <div *dxTemplate="let item of 'data'">
+                          <div>{{item.nameAr}}</div>
+                        </div>
+                      </dx-list>
+                    </div> -->
+  
+  
+                    <div class="body">
+  
+                      <dx-list pageLoadMode="scrollBottom" #listUser [dataSource]="roleDataSourceItems"
+                        [searchEnabled]="true" searchExpr="name" searchMode="contains" [height]="userHight"
+                        [selectionMode]="'all'" [selectAllMode]="'allPages'" [showSelectionControls]="true"
+                        [selectedItemKeys]="selectedItems" itemTemplate="data" [useNativeScrolling]="true"
+                        [scrollByThumb]="true">
+  
+                        <div *dxTemplate="let item of 'data'">
+                          <div>{{item.nameAr}}</div>
+                        </div>
+                      </dx-list>
+  
+  
+  
+  
+                    </div>
+  
+  
+                    <div class="card-footer">
+                      <div class="example-button-row">
+                        <button mat-raised-button type="submit" class="btn save_btn" (click)="saveSelectedItems()">
+                          <i class="fa fa-save"></i> {{'save' | translate}}
+                        </button>
+                        <button mat-raised-button type="button" class="btn close_btn" (click)="hidePopup()">
+                          <i class="ft-x"></i> {{'back' | translate}}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </dx-popup>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <dx-popup class="popup" [rtlEnabled]="this.baseService.isRTL" [showTitle]="true" title="{{'search' | translate}}"
+        [dragEnabled]="false" [(visible)]="popSearch" [maxWidth]="'65.5%'"
+        [maxHeight]="'50%'">
+        <dx-scroll-view>
+          <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
+            <form>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="dx-field-label mb-3">{{'security.identityNo' | translate}}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box placeholder="{{'security.identityNo' | translate}}" id="txtidentityNo" name="identityNo"
+                      ngModel required #txtinvoiceNo="ngModel" [(ngModel)]="searchVm.identityNo" NumbersOnly>
+                    </dx-text-box>
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="dx-field-label mb-3">{{'name' | translate}}</div>
+                  <div class="dx-field-value">
+                    <dx-text-box placeholder="{{'name' | translate}}" id="txtnameAr" name="nameAr" ngModel required
+                      #txtinvoiceNo="ngModel" [(ngModel)]="searchVm.nameAr"></dx-text-box>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+
+                <div class="col-md-6">
+                  <div class="dx-field-label mb-3">{{'security.roles' | translate}}</div>
+                  <div class="dx-field-value">
+                    <dx-select-box id="roles" name="roles" [dataSource]="roles"
+                    placeholder="{{'security.roles' | translate}}" class="borderStyle"
+                    [(ngModel)]="searchVm.roleId"
+                    [displayExpr]="this.baseService.isRTL?'nameAr':'nameAr'" valueExpr="id"
+                    [showClearButton]="true" ngModel [rtlEnabled]="this.baseService.isRTL"
+                    [searchEnabled]="true">
+                </dx-select-box>
+                  </div>
+                </div>
+  
+              </div>
+                <div class="row mt-3">
+                  <div class="col-md-6">
+                    <div class="dx-field-label mb-3">{{'security.isActive' | translate}}</div>
+                    <div class="dx-field-value">
+                      <dx-select-box id="disabledString" name="disabledString" [dataSource]="disabledSelection"
+                      placeholder="{{'security.isActive' | translate}}" class="borderStyle" [value]="null"
+                      [(ngModel)]="searchVm.disabledString" [displayExpr]="this.baseService.isRTL?'nameAr':'nameEn'"
+                      valueExpr="id" [showClearButton]="true" ngModel [rtlEnabled]="this.baseService.isRTL"
+                      [searchEnabled]="true">
+                    </dx-select-box>
+                    </div>
+                  </div>
+                </div>
+            </form>
+            <div class="form-actions mt-5">
+              <div class="example-button-row">
+                <button mat-raised-button type="submit" form="searchForm" class="btn save_btn" class="btn save_btn"
+                  form="searchForm" (click)="searchInUser()"><i class="fas fa-search"></i>
+                  {{'search' | translate}}</button>
+                <button mat-raised-button type="button" class="btn close_btn" (click)="hidePopSearch()"><i
+                    class="ft-x"></i>{{'back' |
+                  translate}}</button>
+              </div>
+  
+            </div>
+          </div>
+        </dx-scroll-view>
+  
+      </dx-popup>
+  
+    </div>
+  </section>
+  

@@ -7,3 +7,10 @@ export class User {
     token?: string;
     email?: string;
 }
+
+
+export interface UserChangePassword {
+    oldPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }

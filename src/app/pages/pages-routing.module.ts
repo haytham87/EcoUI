@@ -1,5 +1,5 @@
 import { CategoriesComponent } from './mainData/categories/categories.component';
-import { NgModule } from '@angular/core';
+import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 
@@ -16,6 +16,10 @@ import { ItemsComponent } from './mainData/items/items.component';
 import { ItemComponent } from './mainData/item/item.component';
 import { BrandsComponent } from './mainData/brands/brands.component';
 import { BrandComponent } from './mainData/brand/brand.component';
+import { UsersComponent } from './security/users/users.component';
+import { UsersResolver } from '../core/resolvers/sc/user.resolver';
+import { RolesResolver } from '../core/resolvers/sc/role.resolver';
+import { UserRolesResolver } from '../core/resolvers/sc/user-role.resolver';
 
 
 const routes: Routes = [
@@ -46,6 +50,19 @@ const routes: Routes = [
   {
     path:'item/:type/:id',
     component:ItemComponent
+  },
+  {
+    path:'users',
+    component:UsersComponent,
+    data: {
+      title: 'Users',
+      breadcrumb: 'Users'
+    },
+    resolve: {
+      itemsDataSource: UsersResolver,
+      roles: RolesResolver,
+      userRoles: UserRolesResolver
+    }
   },
   {
     path: 'boxicons',
