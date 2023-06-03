@@ -95,15 +95,24 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
       this.itemCategory.parentId = this.itemCategoryId;
     }
     this.popCategory = true;
-    this.editCate = true;
+    this.editCate = false;
   }
 
   editCategory(){
-    this.popCategory = true;
+    if (this.itemCategoryId == 0)
+      this.alertService.warning('قم باختيار فئة اولاَ');
+    else {
+      this.popCategory = true;
+      this.editCate = true;
+    }
   }
 
   deleteCategory(){
-    
+    if (this.itemCategoryId == 0)
+      this.alertService.warning('قم باختيار فئة اولاَ');
+    else {
+      
+    }
   }
 
   showPopCategory() {
@@ -172,6 +181,48 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
         // this.itemPhoto.photoImage = data.file;
       });
   }
+
+  onFileUpdate(event,id){
+    this.file = event.target.files[0];
+    document.getElementById('updateImg').textContent = this.file.name;
+    this.uploadService
+      .CategoryImage(this.file)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data: any) => {
+        this.itemPhoto.photoUrl = data.filePath;
+        this.itemPhoto.id = id;
+        this.itemPhoto.categoryId = this.itemCategoryId;
+        this.itemPhotoService.save(this.itemPhoto).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+          (data:ApiObjectData|any)=>{
+            if(data.message.type==='Success'){
+              this.itemCategoryService
+                .get(this.itemCategoryId)
+                .pipe(takeUntil(this.ngUnsubscribe))
+                .subscribe(
+                  (objectData: ApiObjectData) => {
+                    this.itemCategory = objectData.returnData as Category;
+                    this.catHasChild = this.itemCategory.hasChild;
+                    this.categoriesPhoto = this.itemCategory.itemPhotos;
+                    if (this.itemCategory.parentId === null) {
+                      this.id = 0;
+                    } else {
+                      this.id = this.itemCategory.parentId;
+                    }
+                  },
+                  (error) => {
+                    console.log(error);
+                  }
+                );
+            }  
+            else{
+              this.alertService.error(data.message.log);
+            }        
+          }
+        )
+        // this.itemPhoto.photoImage = data.file;
+      });
+  }
+
   clearSelection(){
     this.focusedRowKey=-1;
     this.itemCategoryId=0;
@@ -179,6 +230,16 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
     this.categoriesPhoto=[]
   }
 
+  setMainPhoto(id){
+    if(id){
+      
+      this.itemPhotoService.setCatMain(id,this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+        (photoD:ApiObjectData|any)=>{
+          this.categoriesPhoto= photoD.returnData as ItemPhoto[];
+        }
+      )
+    }
+  }
   onFocusedCatRowChanged(e) {
     if (e) {
       this.itemCategoryId = e;

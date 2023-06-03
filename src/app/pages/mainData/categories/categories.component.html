@@ -31,7 +31,7 @@
                   </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-4">
                           <form class="form">
                             <div class="card-body">
                                 <dx-tree-list #treeData id="treeData" [dataSource]="itemCategories" keyExpr="id"
@@ -42,7 +42,7 @@
                                   (onRowRemoving)="onCategoryRowRemoving($event)">
                                   <dxo-search-panel [visible]="true"></dxo-search-panel>
                                   <dxo-selection mode="single"></dxo-selection>
-                                  <dxi-column caption="{{'itemCategory.code'| translate}}" dataField="code" [width]="170" ></dxi-column>
+                                  <dxi-column caption="{{'Category.code'| translate}}" dataField="code" [width]="100" ></dxi-column>
                                   <dxi-column caption="{{'Category.name'| translate}}"
                                     [dataField]="this.baseService.isRTL? 'nameAr':'nameEn'"></dxi-column>
                                     <!-- <dxo-toolbar>
@@ -59,14 +59,19 @@
                               </div>
                           </form>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="col-3" *ngFor="let item of categoriesPhoto" >
-                            <img [src]="this.baseService.appUrl +item.photoUrl" alt="CatPhoto" data-holder-rendered="true" class="rounded-circle avatar-xl">
-                            <div class="text-center mt-3">
-                                <button *ngIf="!item.isMain" class="btn btn-sm btn-success mr-3 ml-3">{{'Category.mainPhoto'|translate}}</button>
-                                <button class="btn btn-sm btn-danger mr-3 ml-3">{{'delete'|translate}}</button>
+                    <div class="col-lg-8">
+                          <div class="row">
+                            <div class="col-lg-2 col-md-12 mb-3" *ngFor="let item of categoriesPhoto">
+                                <img [src]="this.baseService.appUrl +item.photoUrl" alt="CatPhoto" data-holder-rendered="true" class="rounded-circle avatar-xl">
+                                <div class="button-items text-center mt-3">
+                                    <button *ngIf="!item.isMain" class="btn btn-success btn-sm" (click)="setMainPhoto(item.id)">{{'Category.mainPhoto'|translate}}</button>
+                                    <label for="updateImg" class="btn btn-warning btn-sm">{{'edit'|translate}}</label>
+                                    <input type="file" id="updateImg" accept="image/x-png,image/gif,image/jpeg,application/pdf" (change)="onFileUpdate($event,item.id)" hidden/>
+                                    <button class="btn btn-danger btn-sm">{{'delete'|translate}}</button>
+                                </div>
+                               
                             </div>
-                        </div>
+                          </div>
                     </div>
                     <dx-popup [rtlEnabled]="this.baseService.isRTL" [visible]="popCategory" [maxWidth]="'65.5%'"
                     [maxHeight]="'60%'" [showTitle]="true"  title="{{'Category.Category' | translate}}" [dragEnabled]="false" >
@@ -110,7 +115,7 @@
                                 </div>
                               </div>
                             </div>
-                            <div class="row">
+                            <div class="row" *ngIf="!this.editCate">
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <div style="display: inline-block;"

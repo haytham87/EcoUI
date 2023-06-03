@@ -27,6 +27,14 @@ export class ItemPhotoService {
     return this.base.gets(this.controller);
   }
 
+  setCatMain(id:number,catId:number){
+    return this.base.gets(this.controller+'/SetCatMain/'+id+'/'+catId);
+  }
+
+  setItemMain(id:number,itemId:number){
+    return this.base.gets(this.controller+'/SetItemMain/'+id+'/'+itemId);
+  }
+
   save(obj: ItemPhoto) {
     return this.base.save(this.controller, obj);
   }
