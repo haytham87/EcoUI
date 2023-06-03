@@ -10,7 +10,7 @@ export class ArabicCharDirective {
 
   // --------------------------------------
   //  Regular expressions
-  arabicChar = '^[\u0600-\u06ff]|[\u0750-\u077f]|[\ufb50-\ufc3f]|[\ufe70-\ufefc]';
+  arabicChar = '^[\u0621-\u064A\u0660-\u0669\0-9]+$';
   /**
    * Class constructor
    * @param hostElement

@@ -9,6 +9,7 @@ import { Config } from '../../models/config';
 export class ConfigService {
   config: Config;
 
+  
   constructor(private http: HttpClient) { }
 
   loadConfig() {
@@ -20,6 +21,15 @@ export class ConfigService {
       });
   }
 
+  loadToken(){
+    return this.http
+      .get<Config>('./assets/config/config.json')
+      .toPromise()
+      .then(config => {
+        this.config.token = config.token;
+      });
+  }
+  
   // load() {
 
   //   const jsonFile = `./assets/config.json`;
@@ -37,3 +47,4 @@ export class ConfigService {
 
 
 }
+

@@ -210,11 +210,4 @@ export class BaseService {
     return null;
   }
 
-  CheckIdentityExsist(Identity: string, controller: string): Observable<ApiObjectData> {
-    return this.http.get<ApiObjectData>(this.apiUrl + controller + '/GetByIdentityNo/' + Identity);
-  }
-
-  ByLeaveTime(controller: string): Observable<ApiObjectData> {
-    return this.http.get<ApiObjectData>(this.apiUrl + controller + '/ByLeaveTime');
-  }
 }

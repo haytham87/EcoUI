@@ -218,5 +218,18 @@
   "nameEn":"name in English",
   "parent":"parent",
   "placeholderSelect":"Choose",
-  "required":"Required Field"
+  "required":"Required Field",
+  "Categories":"Categories",
+    "Items":"Items",
+    "Brands":"Brands",
+    "Groups":"Groups",
+    "Users":"Users",
+    "Category":{
+      "name":"Category Name",
+      "photo":"Category Image",
+      "mainPhoto":"Main Photo",
+      "Category":"Add Category",
+      "uploadImage":"Category Upload Image",
+      "mainCate":"Main Category"
+  }
 }

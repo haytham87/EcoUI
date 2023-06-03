@@ -10,10 +10,10 @@ export class UploadService {
   controller = 'Upload';
   constructor(private base: BaseService) { }
 
-  BloodTypeImage(file):Observable<any> {
+    CategoryImage(file):Observable<any> {
       const formData = new FormData(); 
       formData.append("file", file, file.name);
-      return this.base.save(this.controller + '/BloodType', formData)
+      return this.base.save(this.controller + '/CategoryImage', formData)
   }
 
   DriverLiensesImage(file):Observable<any> {

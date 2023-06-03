@@ -1,1 +1,154 @@
-<p>categories works!</p>
+<div class="row">
+    <div class="col-lg-12">
+      <div class="d-xl-flex">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card" >
+              <div class="card-body">
+                <span>
+                    <i class="mdi mdi-account-group"></i>
+                    <h4 class="card-title mb-2">{{"Categories" | translate}}</h4>
+                  </span>
+                  <div class="col-lg-12">
+                    <div class="button-items">
+                      <div #headerActions>
+                        <button type="button"  class="btn btn-success" (click)="addCategory()" 
+                          accessKey="add">
+                          <i class=" fa fa-plus"></i> {{'add' | translate}}
+                        </button>
+                        <button type="button"  class="btn btn-info" (click)="editCategory()" 
+                        accessKey="edit">
+                        <i class=" fa fa-edit"></i> {{'edit' | translate}}
+                      </button>
+                      <button type="button"  class="btn btn-danger" (click)="deleteCategory()" 
+                      accessKey="delete">
+                      <i class=" fa fa-trash"></i> {{'delete' | translate}}
+                    </button>
+                    <button type="button"  class="btn btn-warinig" (click)="clearSelection()">
+                      <i class="mdi mdi-notification-clear-all"></i> {{'clear' | translate}}
+                    </button>
+                      </div>
+                  </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                          <form class="form">
+                            <div class="card-body">
+                                <dx-tree-list #treeData id="treeData" [dataSource]="itemCategories" keyExpr="id"
+                                  [rtlEnabled]="this.baseService.isRTL" [wordWrapEnabled]="true" rootValue="null" [showBorders]="true"
+                                  [showRowLines]="true" [columnAutoWidth]="false" [focusedRowEnabled]="true" parentIdExpr="parentId"
+                                  [cacheEnabled]="true" [(focusedRowKey)]="focusedRowKey" [height]="height"
+                                  (onFocusedRowChanged)="onFocusedCatRowChanged(focusedRowKey)"
+                                  (onRowRemoving)="onCategoryRowRemoving($event)">
+                                  <dxo-search-panel [visible]="true"></dxo-search-panel>
+                                  <dxo-selection mode="single"></dxo-selection>
+                                  <dxi-column caption="{{'itemCategory.code'| translate}}" dataField="code" [width]="170" ></dxi-column>
+                                  <dxi-column caption="{{'Category.name'| translate}}"
+                                    [dataField]="this.baseService.isRTL? 'nameAr':'nameEn'"></dxi-column>
+                                    <!-- <dxo-toolbar>
+                                      <dxi-item location="befor"
+                                      widget="dxDropDownButton"
+                                      name="ActionBtn"
+                                      [options]="{displayExpr:'name', keyExpr:'id',text:'إجراء',width:'120',icon:'preferences',items:downloads}"
+                                     >
+                    
+                                      </dxi-item>
+                                      <dxi-item name="searchPanel" visible="true"  location="befor"></dxi-item>
+                                  </dxo-toolbar> -->
+                                </dx-tree-list>
+                              </div>
+                          </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="col-3" *ngFor="let item of categoriesPhoto" >
+                            <img [src]="this.baseService.appUrl +item.photoUrl" alt="CatPhoto" data-holder-rendered="true" class="rounded-circle avatar-xl">
+                            <div class="text-center mt-3">
+                                <button *ngIf="!item.isMain" class="btn btn-sm btn-success mr-3 ml-3">{{'Category.mainPhoto'|translate}}</button>
+                                <button class="btn btn-sm btn-danger mr-3 ml-3">{{'delete'|translate}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <dx-popup [rtlEnabled]="this.baseService.isRTL" [visible]="popCategory" [maxWidth]="'65.5%'"
+                    [maxHeight]="'60%'" [showTitle]="true"  title="{{'Category.Category' | translate}}" [dragEnabled]="false" >
+                    <dx-scroll-view>
+                        <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
+                          <form class="form" #editForm="ngForm" id="editForm" class="needs-validation" novalidate>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="label mb-3">{{'Category.mainCate' | translate}}</label>
+                                    <div class="form-value">
+                                        <dx-select-box id="categoryparentId" name="parentId" [dataSource]="itemCategories"
+                                        class="borderStyle" [searchEnabled]="true"
+                                        [rtlEnabled]="this.baseService.isRTL"
+                                        [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
+                                        valueExpr="id" [(ngModel)]="itemCategory.parentId" ngModel 
+                                        #categoryparentId="ngModel" [searchEnabled]="true" [readOnly]="true">
+                                    </dx-select-box>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                              <div class="col-md-4">
+                                <label class="label mb-3">{{'code' | translate}}</label>
+                                <div class="form-value">
+                                  <dx-text-box placeholder="{{'code' | translate}}" id="txtcode" name="code" ngModel 
+                                    required #txtinvoiceNo="ngModel" [(ngModel)]="itemCategory.code"></dx-text-box>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <label class="label mb-3">{{'nameAr' | translate}}</label>
+                                <div class="form-value">
+                                  <dx-text-box placeholder="{{'nameAr' | translate}}" id="txtnameAr" name="nameAr" ngModel ArabicChar
+                                    required #txtinvoiceNo="ngModel" [(ngModel)]="itemCategory.nameAr"></dx-text-box>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <label class="label mb-3">{{'nameEn' | translate}}</label>
+                                <div class="form-value">
+                                  <dx-text-box placeholder="{{'nameEn' | translate}}" id="txtnameAr" name="nameEn" ngModel EnglishChar
+                                    required #txtinvoiceNo="ngModel" [(ngModel)]="itemCategory.nameEn"></dx-text-box>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div style="display: inline-block;"
+                                        style="justify-content: space-between;">
+                                        <div class="mt-5">
+                                            <label for="categoryImg_input"
+                                                title="{{'Category.uploadImage' | translate}}"
+                                                class="input_file_label d-flex align-items-center"
+                                                id="categoryImg">
+                                                <i class="fas fa-cloud-upload-alt"
+                                                    style="cursor: pointer;"></i>
+                                            </label>
+                                            <input [dir]="this.baseService.isRTL?'rtl':'ltr'" type="file" id="categoryImg_input" class="input_file_label d-flex align-items-center"
+                                            accept="image/x-png,image/gif,image/jpeg,application/pdf" style="display: none;"
+                                            (change)="onFileChanged($event)">
+                                        </div>
+                                    </div>
+                                      </div>
+                                </div>
+                            </div>
+                          </form>
+                          <div class="form-actions mt-5">
+                            <div class="button-items">
+                              <button type="submit" form="editForm" class="btn btn-success" [disabled]="!(editForm.valid && editForm.dirty)" (click)="saveCategory()"><i class="fa fa-save mr-3 ml-3"></i>{{'save'|translate}}</button>
+                              <button  class="btn btn-danger"(click)="hidePopCategory()"><i class="ft-x"></i>{{'back'
+                                | translate}}</button>
+                            </div>
+        
+                          </div>
+                        </div>
+                      </dx-scroll-view>
+                    </dx-popup>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+

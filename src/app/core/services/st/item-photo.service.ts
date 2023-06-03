@@ -1,15 +1,15 @@
-import { Item } from './../../models/st/item';
-import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { ApiObjectData } from '../../models/apiObjectData';
 import { BaseService } from '../base/base.service';
+import { ApiObjectData } from '../../models/apiObjectData';
+import { Observable } from 'rxjs';
+import { ItemPhoto } from '../../models/st/itemPhoto';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ItemService {
+export class ItemPhotoService {
 
-  controller = 'Item';
+  controller = 'ItemPhoto';
   constructor(private base: BaseService) { }
 
   get(id: number): Observable<ApiObjectData> {
@@ -17,14 +17,17 @@ export class ItemService {
   }
 
   getsByCategoryId(id: number) {
-    return this.base.gets(this.controller + '/GetByCategory/' + id);
+    return this.base.gets(this.controller + '/GetByCategoryId/' + id);
   }
 
+  getsByItemId(id: number) {
+    return this.base.gets(this.controller + '/GetByItemId/' + id);
+  }
   gets(): Observable<ApiObjectData> {
     return this.base.gets(this.controller);
   }
 
-  save(obj: Item) {
+  save(obj: ItemPhoto) {
     return this.base.save(this.controller, obj);
   }
 

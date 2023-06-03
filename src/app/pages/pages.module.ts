@@ -63,6 +63,7 @@ import { CategoriesComponent } from './mainData/categories/categories.component'
 import { BrandsComponent } from './mainData/brands/brands.component';
 import { BrandComponent } from './mainData/brand/brand.component';
 import { UsersComponent } from './security/users/users.component';
+import { RolesComponent } from './security/roles/roles.component';
 
 @NgModule({
   declarations: [
@@ -86,6 +87,7 @@ import { UsersComponent } from './security/users/users.component';
     BrandsComponent,
     BrandComponent,
     UsersComponent,
+    RolesComponent
   ],
   imports: [
     CommonModule,

@@ -1,9 +1,12 @@
 {
-    "baseUrl": "localhost:2222/",
+    "baseUrl": "localhost:2222",
     "appUrl": "http://localhost:2222/",
     "baseReportURL" : "http://localhost:29274/",
     "token":"",
-    "rtL":"",
+    "user":"",
+    "userScreen":"",
+    "routeMenuItems":"",
+    "rtL":true,
     "theme":"",
-    "horizontal":""
+    "horizontal":false
  }

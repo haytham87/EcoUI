@@ -22,7 +22,11 @@ export class FormService {
   }
 
   getUserForms(): Observable<ApiObjectData> {
-    return this.base.gets(this.controller + '/GetUserForms');
+    return this.base.gets(this.controller + '/GetUserForms/');
+  }
+
+  getByMenu(ids: any[]) {
+    return this.base.save(this.controller+'/GetByMenuId',ids)
   }
 
   save(obj: Form) {

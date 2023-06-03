@@ -81,7 +81,6 @@ export class LoginComponent  extends BaseComponent implements OnInit {
             this.authService.user = user.user;
             this.alertService.success(this.translate.instant('toastrMsg.youAreLoggedInSuccessfully'));
             this.getUerMenu();
-            
           }
         },
         error => {
@@ -99,10 +98,8 @@ export class LoginComponent  extends BaseComponent implements OnInit {
   getUerMenu() {
     this.menuService.getUserMenus().pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       data => {
-        console.log("userMenuData",data)
         this.baseService.blockStop();
         localStorage.setItem('routeMenuItems', JSON.stringify(data.returnData));
-        this.router.navigateByUrl('/page/home');
       },
       error => {
         this.baseService.blockStop();
@@ -122,10 +119,10 @@ export class LoginComponent  extends BaseComponent implements OnInit {
       },
       error => {
         this.baseService.blockStop();
-        console.log(error);
+    
       },
       () => {
-        
+        this.router.navigateByUrl('/page/home');
       }
     );
   }

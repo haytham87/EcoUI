@@ -20,6 +20,10 @@ import { UsersComponent } from './security/users/users.component';
 import { UsersResolver } from '../core/resolvers/sc/user.resolver';
 import { RolesResolver } from '../core/resolvers/sc/role.resolver';
 import { UserRolesResolver } from '../core/resolvers/sc/user-role.resolver';
+import { RolesComponent } from './security/roles/roles.component';
+import { MenusResolver } from '../core/resolvers/sc/menu.resolver';
+import { ScreensResolver } from '../core/resolvers/sc/screen.resolver';
+import { CategoriesResolver, CategoryResolver } from '../core/resolvers/st/category.resolver';
 
 
 const routes: Routes = [
@@ -29,11 +33,25 @@ const routes: Routes = [
   },
   {
     path:'category',
-    component:CategoriesComponent
+    component:CategoriesComponent,
+    data:{
+      title:'Categories',
+      breadcrumb:'Categories'
+    },
+    resolve:{
+      itemCategories:CategoriesResolver
+    }
   },
   {
     path:'category/:type/:id',
-    component:CategoryComponent
+    component:CategoryComponent,
+    data:{
+      title:'Categories',
+      breadcrumb:'Categories'
+    },
+    resolve:{
+      itemCategories:CategoryResolver
+    }
   },
   {
     path:'brand',
@@ -62,6 +80,20 @@ const routes: Routes = [
       itemsDataSource: UsersResolver,
       roles: RolesResolver,
       userRoles: UserRolesResolver
+    }
+  },
+  {
+    path:'roles',
+    component:RolesComponent,
+    data:{
+      title:'Roles',
+      breadcrumb:'Roles'
+    },
+    resolve:{
+      itemsDataSource: RolesResolver,
+      menus: MenusResolver,
+      selectedMenus: MenusResolver,
+      screens: ScreensResolver,
     }
   },
   {

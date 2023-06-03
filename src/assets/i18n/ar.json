@@ -115,7 +115,8 @@
     "view":"عرض",
     "search":"بحث",
     "save":"حفظ",
-    "cancel":"عودة",
+    "cancel":"إلغاء",
+    "back":"عودة",
     "LookUps":"تعريفات عامه",
     "Organization":"المؤسسة",
     "Mamagements":"الإدارات",
@@ -126,6 +127,19 @@
     "nameEn":"الإسم بالانجليزي",
     "parent":"تابع إلى",
     "placeholderSelect":"إختر",
-    "required":"حقل مطلوب"
-
+    "required":"حقل مطلوب",
+    "Categories":"فئات الاصناف",
+    "Items":"الأصناف",
+    "Brands":"الماركات",
+    "Groups":"المجموعات",
+    "Users":"المستخدمين",
+    "Category":{
+        "name":"إسم الفئة",
+        "photo":"",
+        "mainPhoto":"الصورة الرئيسية",
+        "Category":"بيانات الفئة",
+        "uploadImage":"صورة للفئة",
+        "mainCate":"الفئة الرئيسية",
+        "code":"كود الفئة"
+    }
 }

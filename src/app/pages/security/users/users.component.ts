@@ -109,7 +109,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     private userService: UserService,
     private router: Router,
     private userRoleService: UserRoleService,
-    private translate: TranslateService,
+    public translate: TranslateService,
     private ElByClassName: ElementRef
   ) {
     super()
@@ -136,34 +136,6 @@ export class UsersComponent extends BaseComponent implements OnInit {
       }
     );
   }
-
-  // ngAfterViewInit() {
-
-  //   var userScreen = this.userScreens.filter((o) => o.nameEn === "users")[0];
-  //   if (userScreen) {
-  //     for (let i = 0; i < this.headerActions.nativeElement.children.length; i++) {
-  //       let flag = false;
-  //       userScreen.action.forEach(userAction => {
-  //         if (this.headerActions.nativeElement.children[i].value === userAction.nameEn) {
-  //           flag = true;
-  //           return;
-  //         }
-  //       });
-  //       if (!flag) {
-  //         this.headerActions.nativeElement.removeChild(this.headerActions.nativeElement.children[i]);
-  //         i--;
-  //       }
-  //     }
-  //   }
-  //   else {
-  //     for (let i = 0; i < this.headerActions.nativeElement.children.length; i++) {
-  //       this.headerActions.nativeElement.removeChild(this.headerActions.nativeElement.children[i]);
-  //       i--;
-  //     }
-  //   }
-
-  // }
-
 
   ngAfterViewInit() {
     var userScreen = this.userScreens.filter((o) => o.nameEn === "users")[0];
@@ -195,46 +167,13 @@ export class UsersComponent extends BaseComponent implements OnInit {
     // this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
     this.route.data.subscribe(
       data => {
-        // console.log(data);
-
-        // for (let i = 0; i < this.userScreens.length; i++) {
-        //   // console.log(this.userScreens[i].nameAr)
-        //   if (this.userScreens[i].nameEn == "users") {
-        //     this.actions = this.userScreens[i].action
-        //     // console.log("actions",this.actions)
-        //     for (let y = 0; y < this.actions.length; y++) {
-        //       switch (this.actions[y].nameAr) {
-        //         case "اظهار":
-        //           this.view = true;
-        //           break;
-        //         case "اضافة":
-        //           this.add = true;
-
-        //           console.log("this.add", this.add)
-        //           console.log("this.edit", this.edit)
-
-        //           break;
-        //         case "تعديل":
-        //           this.edit = true;
-        //           console.log("this.edit", this.edit)
-
-        //           break;
-        //         case "حذف":
-        //           this.delete = true;
-        //           break;
-        //       }
-        //     }
-        //   }
-
-        // }
+        console.log(data);
 
         this.baseService.blockStop();
         this.itemsDataSource = data.itemsDataSource.returnData;
         this.backUsers = this.itemsDataSource;
-        // this.alertService.message(data.itemsDataSource.message);
 
         for (let i = 0; i < this.itemsDataSource.length; i++) {
-          // if(this.itemsDataSource[i].userRoles!==undefined){
           this.selectedItemKeys = this.itemsDataSource[i].userRoles;
           const userRolesArray: number[] = [];
 

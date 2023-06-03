@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class RoleMenuService {
 
-  controller = 'rolemenu';
+  controller = 'RoleMenu';
 
   constructor(private base: BaseService) { }
 
@@ -30,6 +30,6 @@ export class RoleMenuService {
   }
 
   saveBatch(model: any) {
-    return this.base.saveBatch(this.controller + '/SaveBatch/', model);
+    return this.base.saveBatch(this.controller + '/SaveBatch', model);
   }
 }
