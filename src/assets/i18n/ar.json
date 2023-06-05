@@ -133,6 +133,10 @@
     "Brands":"الماركات",
     "Groups":"المجموعات",
     "Users":"المستخدمين",
+    "confirm delete":"هل انت متاكد من الحذف",
+    "deletedDone":"تم الحذف بنجاح",
+    "selectElementFirst":"قم باختيار عنصر اولأ",
+    "addImage":"إضافة صورة",
     "Category":{
         "name":"إسم الفئة",
         "photo":"",
@@ -140,6 +144,50 @@
         "Category":"بيانات الفئة",
         "uploadImage":"صورة للفئة",
         "mainCate":"الفئة الرئيسية",
-        "code":"كود الفئة"
-    }
+        "code":"كود الفئة",
+        "relatedCat":"هذه الفئة مرتبطة بيانات اخري لايمكن حذفها"
+    },
+    "ItemPhoto":{
+        "mainPic":"هذه هي الصورة الرئيسية اختر صورة اخري قبل الحذف"
+    },
+    "security": {
+        "userTitle": "المستخدمين",
+        "roleTitle": "المجموعات",
+        "info": "البيانات",
+        "code": "الكود",
+        "nameAr": "الاسم بالعربي",
+        "nameEn": "الاسم بالإنجليزي",
+        "description": "الوصف",
+        "name": "الاسم",
+        "userName": "اسم المستخدم",
+        "password": "ُكلمة المرور",
+        "email": "البريد الالكتروني",
+        "mobile": "رقم الجوال",
+        "isActive": "الحالة",
+        "allowRefuse": "إمكانية الرفض",
+        "roles": "المجموعات",
+        "permissions": "صلاحيات القوائم",
+        "userRoles": "مجموعات المستخدمين",
+        "rolePermissions": "صلاحيات المجموعات",
+        "menuTitle": "القوائم",
+        "usertype": "نوع المستخدم",
+        "users": "المستخدمين",
+        "addUsers": "إضافة مستخدم لجهة الاختصاص",
+        "orgType": "نوع جهة الاختصاص",
+        "personTypes": "الفئات المستفيدة",
+        "personType":"الفئة",
+        "rank": "الرتبة",
+        "unit": "الإدارة",
+        "organization": "الجهة المختصة",
+        "organizationType":"نوع المجموعة",
+        "screens":"صلاحية الإجراءات",
+        "requestTypes":"نوع الطلب",
+        "requestStatus":"نوع المجموعه",
+        "identityNo":"رقم الهوية",
+        "isDisabled":"غير مفعل",
+        "screensAndRole": "صلاحيات القوائم و الشاشات",
+        "persons": "المندوبين",
+        "addPerson": "هذا الشخص غير موجود يمكنك إضافته كمندوب",
+        "allowPrint": "موافقة الطباعه"
+      }
 }

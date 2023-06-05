@@ -17,6 +17,10 @@ import { AlertService } from 'src/app/core/services/base/alert.service';
 import { CategoryService } from 'src/app/core/services/st/category.service';
 import { Item } from 'src/app/core/models/st/item';
 import { ItemPhoto } from 'src/app/core/models/st/itemPhoto';
+import { TranslateService } from '@ngx-translate/core';
+
+declare var require;
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'categories',
@@ -32,10 +36,8 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
   itemCategories: Category[];
   categoriesPhoto:any[]
   itemPhoto= {} as ItemPhoto;
-  spesificPhotos:ItemPhoto[];
   itemCategoryId = 0;
   id: number;
-  selectedItem: any;
   focusedRowKey: number;
   parentId = false;
   height = 0;
@@ -48,7 +50,8 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
   editCate: boolean = true;
   editCateItem: boolean = true;
   catHasChild: boolean;
-
+photoId:number=0;
+forAddPic:boolean=false;
     downloads: any[];
     file: File = null;
   constructor(
@@ -58,7 +61,8 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
     private alertService: AlertService,
     private itemCategoryService: CategoryService,
     private itemPhotoService:ItemPhotoService,
-    private uploadService:UploadService
+    private uploadService:UploadService,
+    private translate :TranslateService
   ) { super();
     this.downloads = [
       { value: 1, name: 'new row', icon: 'plus' },
@@ -78,7 +82,6 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
   loadData() {
     this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       data => {
-        console.log(data);
         this.itemCategories = data.itemCategories.returnData;
       },
       error => {
@@ -102,16 +105,67 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
     if (this.itemCategoryId == 0)
       this.alertService.warning('قم باختيار فئة اولاَ');
     else {
-      this.popCategory = true;
-      this.editCate = true;
+      this.baseService.blockStart();
+      this.itemCategoryService.get(this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+        (cat:ApiObjectData|any)=>{
+          this.baseService.blockStop();
+          this.itemCategory = cat.returnData as Category;
+          if(this.itemCategory.parentId===null) this.id=0;
+          this.popCategory = true;
+        },error=>{
+          this.baseService.blockStop();
+          this.alertService.error(error)
+        }
+      )
+      
+      // this.editCate = true;
     }
   }
 
   deleteCategory(){
     if (this.itemCategoryId == 0)
-      this.alertService.warning('قم باختيار فئة اولاَ');
+      this.alertService.warning(this.translate.instant('selectElementFirst'));
     else {
-      
+      Swal.fire({
+        title: this.translate.instant('confirm delete'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a886',
+        cancelButtonColor: '#d33',
+        cancelButtonText: this.translate.instant('back'),
+        confirmButtonText: this.translate.instant('delete')
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.baseService.blockStart();
+          this.itemCategoryService.remove(this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+          (apidata:ApiObjectData|any)=>{
+            if(apidata.message.type==='Error'){
+              this.baseService.blockStop();
+              if(apidata.message.log='This Cat related'){
+                Swal.fire({
+                  title: this.translate.instant('Category.relatedCat'),
+                  icon: 'error',
+                  cancelButtonText: this.translate.instant('back'),
+                  confirmButtonText: this.translate.instant('cancel')
+                });
+              }
+            }
+            else{
+              this.baseService.blockStop();
+              this.itemCategories = this.itemCategories.filter(cat=> cat.id!=this.itemCategoryId);
+              this.itemCategoryId=0;
+              this.categoriesPhoto=[]
+              Swal.fire({                
+                icon: 'success',
+                title: this.translate.instant('deletedDone'),
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          }
+          )
+        }
+      })
     }
   }
 
@@ -123,7 +177,7 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
 
   hidePopCategory() {
     this.popCategory = false;
-    this.treeData.instance.refresh();
+    // this.treeData.instance.refresh();
   }
 
   saveCategory() {
@@ -163,7 +217,7 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
       },
       error => {
         this.baseService.blockStop();
-        console.log(error);
+        this.alertService.error(error);
       }
     );
     // }
@@ -182,45 +236,93 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
       });
   }
 
-  onFileUpdate(event,id){
+  onPhotClicked(Id){
+    if(Id) this.photoId = Id
+  }
+
+  onFileUpdate(event){
     this.file = event.target.files[0];
+    this.itemPhoto={}as ItemPhoto;
     document.getElementById('updateImg').textContent = this.file.name;
+    this.baseService.blockStart();
     this.uploadService
       .CategoryImage(this.file)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data: any) => {
         this.itemPhoto.photoUrl = data.filePath;
-        this.itemPhoto.id = id;
+       if(this.forAddPic===false)  this.itemPhoto.id = this.photoId;
         this.itemPhoto.categoryId = this.itemCategoryId;
         this.itemPhotoService.save(this.itemPhoto).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
           (data:ApiObjectData|any)=>{
             if(data.message.type==='Success'){
-              this.itemCategoryService
-                .get(this.itemCategoryId)
-                .pipe(takeUntil(this.ngUnsubscribe))
-                .subscribe(
-                  (objectData: ApiObjectData) => {
-                    this.itemCategory = objectData.returnData as Category;
-                    this.catHasChild = this.itemCategory.hasChild;
-                    this.categoriesPhoto = this.itemCategory.itemPhotos;
-                    if (this.itemCategory.parentId === null) {
-                      this.id = 0;
-                    } else {
-                      this.id = this.itemCategory.parentId;
-                    }
-                  },
-                  (error) => {
-                    console.log(error);
-                  }
-                );
+              this.baseService.blockStop();
+              this.itemPhotoService.getsByCategoryId(this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+                (data:ApiObjectData)=>{
+                  this.categoriesPhoto = data.returnData as ItemPhoto[];
+                },error=>{
+                  this.baseService.blockStop();
+                  this.alertService.error(error);
+                }
+              )
             }  
             else{
+              this.baseService.blockStop();
               this.alertService.error(data.message.log);
             }        
+          },error=>{
+            this.baseService.blockStop();
+            this.alertService.error(error);
           }
         )
         // this.itemPhoto.photoImage = data.file;
       });
+  }
+
+  deletePhoto(id:number){
+    if(id){
+      Swal.fire({
+        title: this.translate.instant('confirm delete'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a886',
+        cancelButtonColor: '#d33',
+        cancelButtonText: this.translate.instant('back'),
+        confirmButtonText: this.translate.instant('delete')
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.baseService.blockStart();
+          this.itemPhotoService.delete(id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+          (apidata:ApiObjectData|any)=>{
+            if(apidata.message.type==='Error'){
+              this.baseService.blockStop();
+              if(apidata.message.log==='This Photo Are Main'){
+                Swal.fire({
+                  title: this.translate.instant('ItemPhoto.mainPic'),
+                  icon: 'error',
+                  cancelButtonText: this.translate.instant('back'),
+                  confirmButtonText: this.translate.instant('cancel')
+                });
+              }
+              else{
+                this.baseService.blockStop();
+                this.alertService.error(apidata.message)
+              }
+            }
+            else{
+              this.categoriesPhoto = this.categoriesPhoto.filter(item=>item.id != id);
+              this.baseService.blockStop();
+              Swal.fire({
+                icon: 'success',
+                title: this.translate.instant('deletedDone'),
+                showConfirmButton: false,
+                timer: 1500
+              })
+            }
+          }
+          )
+        }
+      })
+    }
   }
 
   clearSelection(){
@@ -232,10 +334,15 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
 
   setMainPhoto(id){
     if(id){
-      
+      this.baseService.blockStart();
       this.itemPhotoService.setCatMain(id,this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
         (photoD:ApiObjectData|any)=>{
+          this.baseService.blockStop();
           this.categoriesPhoto= photoD.returnData as ItemPhoto[];
+        },
+        error=>{
+          this.baseService.blockStop();
+          this.alertService.error(error);
         }
       )
     }
@@ -243,6 +350,7 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
   onFocusedCatRowChanged(e) {
     if (e) {
       this.itemCategoryId = e;
+      this.baseService.blockStart();
       this.itemCategoryService
         .get(this.itemCategoryId)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -250,8 +358,18 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
           (objectData: ApiObjectData) => {
             this.itemCategory = objectData.returnData as Category;
             this.catHasChild = this.itemCategory.hasChild;
-            this.categoriesPhoto = this.itemCategory.itemPhotos
-            console.log(this.categoriesPhoto)
+            this.itemPhotoService.getsByCategoryId(this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+              (photo:ApiObjectData|any)=>{
+                this.baseService.blockStop();
+                this.categoriesPhoto = photo.returnData as ItemPhoto[];
+                if(this.categoriesPhoto.length===0) this.editCate=false;
+                else this.editCate=true;
+              },
+              error =>{
+                this.baseService.blockStop();
+                this.alertService.error(error);
+              }
+            )
             if (this.itemCategory.parentId === null) {
               this.id = 0;
             }
@@ -261,46 +379,18 @@ export class CategoriesComponent extends BaseComponent implements OnInit {
 
           },
           (error) => {
-            console.log(error);
+            this.alertService.error(error);
+            this.baseService.blockStop();
           }
         );
     }
 
   }
 
-  onCategoryRowRemoving(e) {
-    this.removeCategoryItem(e);
-  }
-
-  deleteCategoryRow() {
-    this.treeData.instance.deleteRow(
-      this.treeData.instance.getRowIndexByKey(this.itemCategoryId)
-    );
-  }
-
-  removeCategoryItem(ev) {
-    const promise = new Promise<void>((resolve, reject) => {
-      this.baseService.blockStart();
-      this.itemCategoryService.remove(ev.data.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-        (apiObjectData: ApiObjectData|any) => {
-          this.baseService.blockStop();
-          this.alertService.message(apiObjectData.message);
-          if (apiObjectData.message.type === 'Success') {
-            this.itemCategoryId = 0;
-            resolve();
-          } else {
-            reject();
-          }
-        },
-        error => {
-          this.baseService.blockStop();
-          console.log(error);
-          reject();
-        }
-      );
-    });
-    ev.cancel = promise;
-
+  addImage(){
+    this.forAddPic=true;
+    this.itemPhoto= {} as ItemPhoto;
+    this.itemPhoto.categoryId= this.itemCategoryId;
   }
 
   //#endregion

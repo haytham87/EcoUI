@@ -17,7 +17,7 @@
                       <i class=" fa fa-plus"></i> {{'add' | translate}}
                     </button>
           
-                    <button type="button" class="btn btn-outline-info" (click)="openSearchPop()" style="color: black;"
+                    <!-- <button type="button" class="btn btn-outline-info" (click)="openSearchPop()" style="color: black;"
                       accessKey="search">
                       <i class=" fa fa-search" style="color: black !important;"></i> {{'search' | translate}}
                     </button>
@@ -25,7 +25,7 @@
                     <button type="button"  class="btn btn-outline-warning" style="color: black;" *ngIf="removeSearch"
                       (click)="removeSearchs()" accessKey="search">
                       <i class="fas fa-search-minus" style="color: black !important;"></i> {{'removeSearch' | translate}}
-                    </button>
+                    </button> -->
                   </div>
               </div>
             </div>
@@ -38,7 +38,7 @@
                         [columnHidingEnabled]="true" [height]="height" (onInitialized)="saveGridInstance($event)"
                         (onEditorPreparing)="onEditorPreparing($event)" (onRowUpdating)="onRowUpdating($event)"
                         (onRowRemoving)="onRowRemoving($event)" (onRowInserting)="onRowInserting($event)"
-                        (onCellPrepared)="onCellPrepared($event)">
+                        (onCellPrepared)="onCellPrepared($event)" (onSelectionChanged)="onSelectionChanged($event)">
                         <dxo-search-panel [visible]="true"></dxo-search-panel>
                         <dxo-selection mode="single"></dxo-selection>
                         <dxo-paging [pageSize]="10"></dxo-paging>
@@ -48,35 +48,25 @@
                         <dxo-sorting mode="multiple"></dxo-sorting>
                         <dxo-filter-row [visible]="true"></dxo-filter-row>
                         <dxo-header-filter [visible]="true"></dxo-header-filter>
-                        <dxi-column dataField="nameAr" caption="{{'security.name' | translate}}">
+                        <dxi-column [dataField]="this.baseService.isRTL?'nameAr':'nameEn'" alignment="center"  caption="{{'security.name' | translate}}">
                           <dxi-validation-rule type="required"
                             message="{{'required' | translate}}"></dxi-validation-rule>
                           <dxi-validation-rule type="pattern" [pattern]="arabicChar"
                             message="{{'requiredLang' | translate}}">
                           </dxi-validation-rule>
                         </dxi-column>
-
-                        <dxi-column dataField="requestStatusNameAr" caption="{{'security.requestStatus' | translate}}">
-                        </dxi-column>
-                        <dxi-column dataField="description"
+                        <dxi-column dataField="description" alignment="center"
                           caption="{{'security.description' | translate}}"></dxi-column>
-                        <dxi-column [allowFiltering]="false" [allowSorting]="false" cellTemplate="actions"
+                        <dxi-column [allowFiltering]="false" [allowSorting]="false" cellTemplate="actions" alignment="center"
                           caption="{{'actions' | translate}}">
                         </dxi-column>
-                        <div *dxTemplate="let data of 'actions'"
+                        <div *dxTemplate="let data of 'actions'" 
                           style="text-align: center;font-size: 20px;color: #00a886;">
                           <i *ngIf="data.data.isCreatedAutomatic!==true" class="fa fa-braille"
                             style="cursor: pointer;margin: 0 10px;" (click)="openPopup(data.data.id)"
                             title="{{'security.screensAndRole' | translate}}" accessKey="permissions"></i>
-                          <!-- <i *ngIf="data.data.isCreatedAutomatic!==true" class="fa fa-braille"
-                      style="cursor: pointer;margin: 0 10px;" (click)="openPopupScreen(data.data.id)"
-                      title="{{'security.screens' | translate}}" accessKey="screens"></i> -->
-
-                          <!-- <i *ngIf="data.data.isCreatedAutomatic!==true" class="fa fa-braille"
-                      style="cursor: pointer;margin: 0 10px;" (click)="openPopupScreen(data.data.id)"
-                      title="{{'security.screensAndRole' | translate}}" accessKey="screens"></i> -->
                           <i class="far fa-edit" style="cursor: pointer;margin: 0 10px;"
-                            (click)="newEditRole(data.data.id)" accessKey="edit" title="{{'edit' | translate}}"></i>
+                            (click)="editRole()" accessKey="edit" title="{{'edit' | translate}}"></i>
                           <i *ngIf="data.data.isCreatedAutomatic!==true" class="far fa-trash-alt"
                             style="cursor: pointer;margin: 0 10px; color: red;" (click)="deleteRole(data.data.id)"
                             title="{{'delete' | translate}}" accessKey="delete"></i>
@@ -139,37 +129,7 @@
                     </dx-popup>
               </div>
             </div>
-            <dx-popup class="popup" [rtlEnabled]="this.baseService.isRTL" [showTitle]="true"
-              title="{{'search' | translate}}" [dragEnabled]="false" [(visible)]="popSearch" [maxWidth]="'65.5%'"
-              [maxHeight]="'40%'">
-              <dx-scroll-view>
-                <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
-                  <form>
-                    <div class="row">
-                      <div class="col-md-12">
-                        <div class="dx-field-label mb-3">{{'name' | translate}}</div>
-                        <div class="dx-field-value">
-                          <dx-text-box placeholder="{{'name' | translate}}" id="txtnameAr" name="nameAr" ngModel
-                            required #txtinvoiceNo="ngModel" [(ngModel)]="searchVm.nameAr"></dx-text-box>
-                        </div>
-                      </div>
-                    </div>
-
-                  </form>
-                  <div class="form-actions mt-5">
-                    <div class="example-button-row">
-                      <button type="submit" form="searchForm" class="btn btn-success"
-                        form="searchForm" (click)="searchInRole()"><i class="fas fa-search"></i>
-                        {{'search' | translate}}</button>
-                      <button  class="btn btn-danger"(click)="hidePopSearch()"><i class="ft-x"></i>{{'back'
-                        | translate}}</button>
-                    </div>
-
-                  </div>
-                </div>
-              </dx-scroll-view>
-
-            </dx-popup>
+    
 
             <dx-popup class="popup" [rtlEnabled]="this.baseService.isRTL" [showTitle]="true"
               title="{{'addRole' | translate}}" [dragEnabled]="false" [(visible)]="popRoleVisible" [maxWidth]="'65.5%'"
@@ -207,7 +167,7 @@
                       <button type="submit"  class="btn btn-success"
                         form="searchForm" (click)="saveRole()"><i class="fas fa-save"></i>
                         {{'search' | translate}}</button>
-                      <button  class="btn btn-danger"(click)="hidePopSearch()"><i class="ft-x"></i>{{'back'
+                      <button  class="btn btn-danger" ><i class="ft-x"></i>{{'back'
                         | translate}}</button>
                     </div>
 

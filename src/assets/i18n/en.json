@@ -224,12 +224,49 @@
     "Brands":"Brands",
     "Groups":"Groups",
     "Users":"Users",
+    "confirm delete":"are you sure to delete",
+    "deletedDone":"Deleted Done",
+    "selectElementFirst":"Select Element First",
+    "addImage":"Add Image",
     "Category":{
       "name":"Category Name",
       "photo":"Category Image",
       "mainPhoto":"Main Photo",
       "Category":"Add Category",
       "uploadImage":"Category Upload Image",
-      "mainCate":"Main Category"
+      "mainCate":"Main Category",
+      "code":"category code",
+      "relatedCat":"this category are related with another data can`t be deleted"
+  },
+  "ItemPhoto":{
+      "mainPic":"This is Main Photo Please Make another photo are Main Before Delete"
+  },
+  "security": {
+    "userTitle": "Users",
+    "roleTitle": "Groups",
+    "info": "Informations",
+    "code": "Code",
+    "nameAr": "Arabic Name",
+    "nameEn": "English Name",
+    "description": "Description",
+    "name": "Name",
+    "userName": "Usernme",
+    "password": "ُPassword",
+    "email": "Email",
+    "mobile": "Mobile",
+    "isActive": "Status",
+    "roles": "Roles",
+    "permissions": "Permissions",
+    "userRoles": "User Roles",
+    "rolePermissions": "Role Permissions",
+    "menuTitle": "Menu Title",
+    "usertype": "User Type",
+    "users": "Users",
+    "addUsers": "Add Users",
+    "orgType": "Organiztion Type",
+    "organization": "Organization",
+    "personType": "Groups",
+    "rank": "Rank",
+    "unit": "Unit"
   }
 }

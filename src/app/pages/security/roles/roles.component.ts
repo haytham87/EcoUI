@@ -236,19 +236,26 @@ export class RolesComponent extends BaseComponent implements OnInit {
   }
 
   saveRole(){
+    this.baseService.blockStart();
     this.roleService.save(this.newRole).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       (roleData:ApiObjectData|any)=>{
+        this.baseService.blockStop();
         if(roleData.message.type==='Success'){
           this.itemsDataSource.push(roleData.returnData);
           this.alertService.success('تم الحفظ بنجاح');
           this.popRoleVisible = false;
         }
         else{
+          this.baseService.blockStop();
           this.alertService.error(roleData.message.log);
         }
+      },error=>{
+        this.baseService.blockStop();
+        this.alertService.error(error);
       }
     )
   }
+
   removeItem(e) {
     this.baseService.blockStart();
     const promise = new Promise<void>((resolve, reject) => {
@@ -334,6 +341,12 @@ export class RolesComponent extends BaseComponent implements OnInit {
     }
   }
 
+  onSelectionChanged(e){
+    if(e){
+      this.newRole = e.selectedRowsData[0]
+    }
+  }
+
   onClickClose(): void {
     window.close();
   }
@@ -347,10 +360,8 @@ export class RolesComponent extends BaseComponent implements OnInit {
     this.dataGridInstance.addRow();
   }
 
-  editRole(id) {
-    this.dataGridInstance.editRow(
-      this.dataGridInstance.getRowIndexByKey(id)
-    );
+  editRole() {
+   this.popRoleVisible=true;
   }
 
   deleteRole(id) {
@@ -360,17 +371,17 @@ export class RolesComponent extends BaseComponent implements OnInit {
   }
 
   openPopup(id) {
+    this.openPopupScreen(id);
     this.selectedRowIndex = this.dataGridInstance.getRowIndexByKey(id);
     this.selectedRowKeys = this.itemsDataSource[this.selectedRowIndex].roleMenus;
     this.treeList.instance.selectRows(this.selectedRowKeys, false);
     this.popupVisible = true;
     this.itemId = id;
 
-    // this.openPopupScreen(id);
+   
   }
 
   openPopupScreen(id) {
-    debugger
     this.selectedRowIndexCategory = this.dataGridInstance.getRowIndexByKey(id);
     this.selectedRowKeysCategories = this.itemsDataSource[this.selectedRowIndexCategory].roleForms;
     // this.selectedRowKeysRoles = this.itemsDataSource[this.selectedRowIndexCategory].roleMenus;
@@ -465,8 +476,6 @@ export class RolesComponent extends BaseComponent implements OnInit {
     this.selectedMeuns  =this.treeList.instance.getSelectedRowKeys('leavesOnly');
     this.formService.getByMenu(this.selectedMeuns).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       (data: ApiObjectData|any)=> {
-        console.log(data.message)
-        console.log(data.returnData)
         this.returnedScreens = data.returnData as Form[];
 
         this.selectedRowIndexCategory = this.dataGridInstance.getRowIndexByKey(this.itemId);
@@ -514,124 +523,4 @@ export class RolesComponent extends BaseComponent implements OnInit {
     });
   }
 
-  /* Person Multi Selection */
-  onPersonDropDownBoxValueChanged(e) {
-    if (!this.personTreeView) return;
-
-    if (!this.personTypeIds) {
-      this.personTreeView.instance.unselectAll();
-    } else {
-      this.personTreeView.instance.selectItem(this.personTreeView);
-    }
-  }
-
-  onTreeBoxOptionChangedForPerson(e) {
-    if (e.name === 'value') {
-      this.ref.detectChanges();
-    }
-  }
-
-  onTreeViewSelectionChanged(e) {
-    this.personTypeIds = e.component.getSelectedNodeKeys();
-  }
-
-
-  /* Rank Multi Selection */
-  onRankDropDownBoxValueChanged(e) {
-    if (!this.rankTreeView) return;
-
-    if (!this.rankIds) {
-      this.rankTreeView.instance.unselectAll();
-    } else {
-      this.rankTreeView.instance.selectItem(this.rankTreeView);
-    }
-  }
-
-  onTreeBoxOptionChangedForRank(e) {
-    if (e.name === 'value') {
-      this.ref.detectChanges();
-    }
-  }
-
-  onRankTreeViewSelectionChanged(e) {
-    this.rankIds = e.component.getSelectedNodeKeys();
-  }
-
-
-  /*Unit Multi Selection */
-  onDropDownBoxValueChanged(e) {
-    this.updateSelection(this.unitTreeView && this.unitTreeView.instance);
-  }
-
-  onTreeViewReady(e) {
-    this.updateSelection(e.component);
-  }
-
-  updateSelection(treeView) {
-    if (!treeView) return;
-
-    if (!this.treeboxUnit) {
-      treeView.unselectAll();
-    }
-
-    if (this.treeboxUnit) {
-      this.treeboxUnit.forEach(((value) => {
-        treeView.selectItem(value);
-      }));
-    }
-  }
-
-  onTreeUnitViewSelectionChanged(e) {
-    this.treeboxUnit = e.component.getSelectedNodeKeys();
-    this.searchVm.unitIds = this.treeboxUnit.toString();
-  }
-
-  openSearchPop(){
-    this.popSearch=true;
-    this.searchVm ={} as Role;
-  }
-
-  searchInRole() {
-    this.baseService.blockStart();
-    this.roleService.searchInRole(this.searchVm).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-      (data:ApiObjectData|any)=>{
-        this.baseService.blockStop();
-        this.itemsDataSource = data.returnData as Role[];
-        this.itemsDataSource.forEach(item => {
-          const roleMenusArray: number[] = [];
-          item.roleMenus.forEach(element => {
-            roleMenusArray.push(element.menuId);
-          });
-          item.roleMenus = roleMenusArray;
-
-          const roleCategoriesArray: number[] = [];
-          item.roleForms.forEach(element => {
-            roleCategoriesArray.push(element.formId);
-          });
-          item.roleForms = roleCategoriesArray;
-        });
-        this.popSearch=false;
-        this.removeSearch = true;
-      },error=>{
-        this.baseService.blockStop();
-        this.alertService.error(error);
-        this.alertService.error(error);
-      }
-    )
-  }
-
-  removeSearchs() {
-    this.baseService.blockStart();
-    this.itemsDataSource =  this.backRoles;
-    this.baseService.blockStop();
-    this.removeSearch = false
-  }
-
-  hidePopSearch(){
-    this.popSearch=false;
-  }
-
-  newEditRole(id) {
-    this.router.navigate(['/page/addRole/edit', id]);
-  }
 }

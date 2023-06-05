@@ -24,7 +24,7 @@
                       accessKey="delete">
                       <i class=" fa fa-trash"></i> {{'delete' | translate}}
                     </button>
-                    <button type="button"  class="btn btn-warinig" (click)="clearSelection()">
+                    <button type="button"  class="btn btn-warning" (click)="clearSelection()">
                       <i class="mdi mdi-notification-clear-all"></i> {{'clear' | translate}}
                     </button>
                       </div>
@@ -38,12 +38,11 @@
                                   [rtlEnabled]="this.baseService.isRTL" [wordWrapEnabled]="true" rootValue="null" [showBorders]="true"
                                   [showRowLines]="true" [columnAutoWidth]="false" [focusedRowEnabled]="true" parentIdExpr="parentId"
                                   [cacheEnabled]="true" [(focusedRowKey)]="focusedRowKey" [height]="height"
-                                  (onFocusedRowChanged)="onFocusedCatRowChanged(focusedRowKey)"
-                                  (onRowRemoving)="onCategoryRowRemoving($event)">
+                                  (onFocusedRowChanged)="onFocusedCatRowChanged(focusedRowKey)">
                                   <dxo-search-panel [visible]="true"></dxo-search-panel>
                                   <dxo-selection mode="single"></dxo-selection>
-                                  <dxi-column caption="{{'Category.code'| translate}}" dataField="code" [width]="100" ></dxi-column>
-                                  <dxi-column caption="{{'Category.name'| translate}}"
+                                  <dxi-column caption="{{'Category.code'| translate}}" alignment="center" dataField="code" [width]="100" ></dxi-column>
+                                  <dxi-column caption="{{'Category.name'| translate}}" alignment="center"
                                     [dataField]="this.baseService.isRTL? 'nameAr':'nameEn'"></dxi-column>
                                     <!-- <dxo-toolbar>
                                       <dxi-item location="befor"
@@ -61,13 +60,16 @@
                     </div>
                     <div class="col-lg-8">
                           <div class="row">
-                            <div class="col-lg-2 col-md-12 mb-3" *ngFor="let item of categoriesPhoto">
-                                <img [src]="this.baseService.appUrl +item.photoUrl" alt="CatPhoto" data-holder-rendered="true" class="rounded-circle avatar-xl">
+                            <div class="text-center" *ngIf="itemCategoryId!==0">
+                              <label for="updateImg" class="btn btn-primary btn-lg  fas fa-images" (click)="addImage()" ngbTooltip="{{'addImage'|translate}}"></label>
+                            </div>
+                            <div class="col-lg-2 col-md-12 mb-3" *ngFor="let photo of categoriesPhoto">
+                                <img [src]="this.baseService.appUrl +photo.photoUrl" alt="CatPhoto" data-holder-rendered="true" class="rounded-circle avatar-xl thumbnail">
                                 <div class="button-items text-center mt-3">
-                                    <button *ngIf="!item.isMain" class="btn btn-success btn-sm" (click)="setMainPhoto(item.id)">{{'Category.mainPhoto'|translate}}</button>
-                                    <label for="updateImg" class="btn btn-warning btn-sm">{{'edit'|translate}}</label>
-                                    <input type="file" id="updateImg" accept="image/x-png,image/gif,image/jpeg,application/pdf" (change)="onFileUpdate($event,item.id)" hidden/>
-                                    <button class="btn btn-danger btn-sm">{{'delete'|translate}}</button>
+                                    <button *ngIf="!photo.isMain" class="btn btn-success btn-sm" (click)="setMainPhoto(photo.id)">{{'Category.mainPhoto'|translate}}</button>
+                                    <label for="updateImg" class="btn btn-warning btn-sm" (click)="onPhotClicked(photo.id)">{{'edit'|translate}}</label>
+                                    <input type="file" id="updateImg" accept="image/x-png,image/gif,image/jpeg,application/pdf" (change)="onFileUpdate($event)" hidden/>
+                                    <button class="btn btn-danger btn-sm" (click)="deletePhoto(photo.id)">{{'delete'|translate}}</button>
                                 </div>
                                
                             </div>
