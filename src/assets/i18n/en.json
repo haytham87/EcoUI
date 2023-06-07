@@ -202,6 +202,7 @@
     }
 
   },
+  "noUserFound":"Not found any User by this Email please Check again",
   "add":"add",
   "edit":"edit",
   "delete":"delete",
@@ -260,7 +261,8 @@
     "userRoles": "User Roles",
     "rolePermissions": "Role Permissions",
     "menuTitle": "Menu Title",
-    "usertype": "User Type",
+    "userType": "User Type",
+    "nickName":"Nick Name",
     "users": "Users",
     "addUsers": "Add Users",
     "orgType": "Organiztion Type",

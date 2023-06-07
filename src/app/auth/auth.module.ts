@@ -6,9 +6,11 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgOtpInputModule } from  'ng-otp-input';
 
 import { LoginComponent } from './login/login.component';
+import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 @NgModule({
   declarations: [
     LoginComponent,
+    ForgetPasswordComponent,
   ],
   imports: [
     CommonModule,

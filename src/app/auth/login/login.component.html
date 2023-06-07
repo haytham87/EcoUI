@@ -18,7 +18,7 @@
                                     <p class="text-muted"></p>
                                 </div>
 
-                                <div class="mt-4 pt-3">
+                                <div class="mt-4 pt-3" *ngIf="this.forgetPsw==false">
                                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
                                         <div class="mb-3">
@@ -50,12 +50,47 @@
                                         </div>
 
                                         <div class="mt-4">
-                                            <a routerLink="/" class="text-muted"><i
+                                            <a (click)="showForget()" class="text-muted"><i
                                                     class="mdi mdi-lock me-1"></i> هل نسيت كلمة المرور؟</a>
                                         </div>
                                     </form>
                                 </div>
 
+
+                                <div class="mt-4 pt-3" *ngIf="this.forgetPsw==true">
+                                    <form >
+
+                                        <div class="mb-3" *ngIf="typeCode==false">
+                                            <label for="email" class="fw-semibold">البريد الالكتروني</label>
+                                            <input type="text" name="email" class="form-control" id="email"
+                                            [(ngModel)]="user.email" placeholder="البريد الالكتروني">
+                                        </div>
+                                        <div class="mb-3" *ngIf="typeCode==true">
+                                            <label for="email" class="fw-semibold">كود التحقق</label>
+                                            <input type="text" name="receveCode" class="form-control" id="email"
+                                            [(ngModel)]="user.receveCode" placeholder="كود التحقق">
+                                        </div>
+                                        <div class="row align-items-center">
+                                            
+                                            <div class="col-6" >
+                                                <div class="text-end">
+                                                    <button *ngIf="typeCode==false" class="btn btn-primary w-md waves-effect waves-light ml-3" (click)="checkUserNameExsit()"
+                                                        >البحث عن ايميل المستخدم</button>
+
+                                                      <button *ngIf="typeCode==true" class="btn btn-primary w-md waves-effect waves-light ml-3" (click)="checkCode()">
+                                                         التحقق وتغيير كلمة المرور
+                                                      </button>  
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="text-end">
+                                                    <button class="btn btn-primary w-md waves-effect waves-light mr-3" (click)="showLogin()"
+                                                        >تسجيل الدخول</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
 

@@ -31,8 +31,12 @@ export class User {
   identityNo:any
   unitIdList: number[]
   roleId: number
-  disabledInfo: string
+  disabledInfoAr: string
+  disabledInfoEn: string
   disabledString: string
+  userTypeNameAr:string
+  userTypeNameEn:string
+  receveCode:number;
 }
 
 export interface UserChangePassword {

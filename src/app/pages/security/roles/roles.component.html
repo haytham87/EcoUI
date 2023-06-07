@@ -80,7 +80,7 @@
                         <div class="row">
                           <div class="col-lg-6">
                             <div>
-                              <dx-tree-list [dataSource]="menus" keyExpr="id" parentIdExpr="parentId" [height]="'80%'"
+                              <dx-tree-list #treeList [dataSource]="menus" keyExpr="id" parentIdExpr="parentId" [height]="'80%'"
                                 [rtlEnabled]="this.baseService.isRTL" [columnAutoWidth]="true" [expandedRowKeys]="[1]"
                                 [showRowLines]="true" [showBorders]="true"
                                 (onSelectionChanged)="handlesxreenSelect($event)">

@@ -1,3 +1,4 @@
+import { VerificationService } from './../../core/services/verification.service';
 import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
@@ -11,7 +12,12 @@ import { MenuService } from 'src/app/core/services/sc/menu.service';
 import { BaseComponent } from 'src/app/pages/base/base/base.component';
 import { User } from 'src/app/core/models/sc/user';
 import { FormService } from 'src/app/core/services/sc/form.service';
+import { UserService } from 'src/app/core/services/sc/user.service';
+import { ApiObjectData } from 'src/app/core/models/apiObjectData';
 
+
+declare var require;
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'login',
@@ -25,7 +31,12 @@ export class LoginComponent  extends BaseComponent implements OnInit {
   error = '';
   hide = true;
   screens: any;
+  forgetPsw:boolean=false;
   year: number = new Date().getFullYear();
+
+  verifiCode:any;
+  typeCode:boolean=false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -37,16 +48,21 @@ export class LoginComponent  extends BaseComponent implements OnInit {
     public baseService: BaseService,
     private alertService: AlertService,
     private translate: TranslateService,
+    private userService: UserService,
+    private verificationService:VerificationService
   ) { super() }
 
   ngOnInit(): void {
-    this.loginForm = this.formBuilder.group({
-      email: [
-        '',
-        [Validators.required, Validators.minLength(3)]
-      ],
-      password: ['', Validators.required]
-    });
+    if(this.forgetPsw==false){
+      this.loginForm = this.formBuilder.group({
+        email: [
+          '',
+          [Validators.required, Validators.minLength(3)]
+        ],
+        password: ['', Validators.required]
+      });
+    }
+    
   }
 
   // onSubmit() {
@@ -127,4 +143,53 @@ export class LoginComponent  extends BaseComponent implements OnInit {
     );
   }
 
+  showForget(){
+    this.forgetPsw=true;
+  }
+
+  showLogin(){
+    this.forgetPsw=false;
+  }
+
+  checkUserNameExsit(){
+    if(this.user.email!==''||this.user.email!==null){
+      this.baseService.blockStart();
+      this.userService.getUserByUserName(this.user.email).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+        (apiData:ApiObjectData)=>{
+          this.baseService.blockStop();
+          if(apiData.message.type==='Success'){
+            this.verificationService.get(this.user.email).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+              (verif:ApiObjectData)=>{
+                if(verif.message.type==='Success'){
+                this.verifiCode  = verif.returnData ;
+                this.alertService.success('تم إرسال الكود الخاص بك على البريد الالكتروني')
+                this.typeCode=true;
+              }
+                else
+                  this.alertService.error(verif.message.content);
+              },error=>{
+                this.alertService.error(error);
+                this.baseService.blockStop();
+              }
+            )
+          }
+          else if(apiData.message.type==='Error'){
+            if(apiData.message.content==='No User Found')
+              this.alertService.error(this.translate.instant('noUserFound'))
+          }
+        },error=>{
+          this.baseService.blockStop();
+          this.alertService.error(error);
+        }
+      )
+    }
+  }
+
+  checkCode(){
+    if(this.user.receveCode==this.verifiCode){
+      this.alertService.success('تم تغيير كلمة المرور وارسالها على البريد الالكتروني')
+    }
+    else  
+      this.alertService.warning('يرجي التاكد من كود التحقق المرسل هلى البريد الالكتروني')
+  }
 }

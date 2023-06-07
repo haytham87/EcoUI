@@ -42,8 +42,8 @@ export class BaseService {
     return this.http.post(this.apiUrl + controller + '/', model);
   }
 
-  saveBatch(controller: string, model: any) {
-    return this.http.post(this.apiUrl + controller + '/', model);
+  saveBatch(controller: string, model: any): Observable<ApiObjectData> {
+    return this.http.post<ApiObjectData>(this.apiUrl + controller + '/', model);
   }
 
   remove(controller: string, id: number) {

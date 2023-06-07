@@ -16,6 +16,7 @@ import { RoleMenuService } from 'src/app/core/services/sc/role-menu.service';
 import { TranslateService } from '@ngx-translate/core';
 import { FormService } from 'src/app/core/services/sc/form.service';
 import { RoleScreenService } from 'src/app/core/services/sc/role-form.service';
+import { RoleMenu } from 'src/app/core/models/sc/roleMenu';
 
 @Component({
   selector: 'roles',
@@ -24,15 +25,9 @@ import { RoleScreenService } from 'src/app/core/services/sc/role-form.service';
 })
 export class RolesComponent extends BaseComponent implements OnInit {
   @ViewChild('gridData', { static: true }) gridData: DxDataGridModule;
-  @ViewChild(DxTreeListComponent, { static: false }) treeList: DxTreeListComponent;
+  @ViewChild('treeList', { static: false }) treeList: DxTreeListComponent;
   @ViewChild('treeListCategory', { static: false }) treeListCategory: DxTreeListComponent;
-  @ViewChild('treeUnits', { static: false }) treeUnits: DxTreeListComponent;
-  @ViewChild('list', { static: false }) list: DxListComponent;
-  @ViewChild(DxTreeViewComponent, { static: false }) personTreeView;
-  @ViewChild(DxTreeViewComponent, { static: false }) rankTreeView;
-  // @ViewChild(DxTreeViewComponent, { static: false }) unitTreeView;
   @ViewChild("headerActions") headerActions: ElementRef;
-  @ViewChild('unitTreeView', { static: false }) unitTreeView: DxTreeViewComponent;
 
   itemsDataSource: Role[];
   role: Role;
@@ -41,7 +36,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
   selectedRowKeys: any[] = [];
   selectedItems: any[] = [];
   selectedNodes: any[] = [];
-  dataModel: any = { roleId: '', roleMenus: [] };
+  dataModel= {} as RoleMenu;
   itemId = 0;
   selectedRowIndex = -1;
   itemIdScreen = 0;
@@ -73,7 +68,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
   selectedRowKeysCategories: number[] = [];
   selectedRowKeysRoles: number[] = [];
   selectedRowIndexCategory = -1;
-  dataModelCategory: any = { roleId: '', roleForms: [] };
+  dataModelCategory: any = { roleId: 0, roleForms: [] };
   selectedMeuns: number[]
   popupVisibleScreen = false;
   categories: any[];
@@ -362,6 +357,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
 
   editRole() {
    this.popRoleVisible=true;
+   this.newRole.id = this.itemId;
   }
 
   deleteRole(id) {
@@ -413,35 +409,13 @@ export class RolesComponent extends BaseComponent implements OnInit {
     this.popRoleVisible = false;
   }
 
-  openGatesPopup() {
-    this.popupGatesVisible = true;
-  }
-
-  hideGatesPopup() {
-    this.list.selectedItemKeys = [];
-    this.popupGatesVisible = false;
-  }
-
-  // saveSelectedUnits() {
-  //   this.baseService.blockStart();
-  //   this.role = {} as Role;
-  //   this.role.id = this.itemId;
-  //   this.role.unitIdList = this.treeUnits.instance.getSelectedRowKeys('all');
-  // }
-
-  saveSelectedGates() {
-    this.baseService.blockStart();
-    this.role = {} as Role;
-    this.role.id = this.itemId;
-  }
-
   saveSelectedItems() {
     debugger
     this.dataModel.roleId = this.itemId;
     this.dataModel.roleMenus = this.treeList.instance.getSelectedRowKeys('leavesOnly');
 
     // Handle asynchronous work by using promise
-    const promise = new Promise<void>((resolve, reject) => {
+    // const promise = new Promise<void>((resolve, reject) => {
       this.baseService.blockStart();
       // Call API mthod to save updated record on the server
       this.roleMenuService.saveBatch(this.dataModel).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
@@ -452,23 +426,23 @@ export class RolesComponent extends BaseComponent implements OnInit {
           if (apiObjectData.message.type === 'Success') {
             this.alertService.success(this.translate.instant("toastrMsg.savedSuccessfully"));
             this.saveSelectedScreens();
-            resolve();
+            // resolve();
             // this.popupVisible = false;
             this.popupVisible = false;
             this.itemsDataSource[
               this.selectedRowIndex
             ].roleMenus = this.dataModel.roleMenus;
           } else {
-            reject();
+            // reject();
           }
         },
         error => {
           this.baseService.blockStop();
           this.alertService.error(error);
-          reject();
+          // reject();
         }
       );
-    });
+    // });
   }
 
   handlesxreenSelect(e) {

@@ -19,6 +19,7 @@ import { Item } from 'src/app/core/models/st/item';
 import { ItemPhoto } from 'src/app/core/models/st/itemPhoto';
 import { TranslateService } from '@ngx-translate/core';
 
+
 declare var require;
 const Swal = require('sweetalert2');
 
@@ -202,13 +203,27 @@ forAddPic:boolean=false;
           this.itemCategoryService.gets().pipe(takeUntil(this.ngUnsubscribe)).subscribe(
             (objectData: ApiObjectData) => {
               this.itemCategories = objectData.returnData as Category[];
+            },
+            error=>{
+              this.baseService.blockStop();
+              this.alertService.error(error);
             }
           )
           if(this.itemPhoto.photoUrl!==''||this.itemPhoto.photoUrl!==null){
             this.itemPhoto.categoryId = this.itemCategory.id;
             this.itemPhotoService.save(this.itemPhoto).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
               (data:ApiObjectData|any)=>{
-                // this.categoriesPhoto = data.returnData ;
+                 this.itemPhotoService.getsByCategoryId(this.itemCategory.id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+                  (photos:ApiObjectData)=>{
+                    this.categoriesPhoto = photos.returnData as ItemPhoto[];
+                  },error=>{
+                    this.baseService.blockStop();
+                    this.alertService.error(error);
+                  }
+                 )
+              },error=>{
+                this.baseService.blockStop();
+                this.alertService.error(error);
               }
             )
           }
@@ -318,6 +333,9 @@ forAddPic:boolean=false;
                 timer: 1500
               })
             }
+          },error=>{
+            this.baseService.blockStop();
+            this.alertService.error(error);
           }
           )
         }

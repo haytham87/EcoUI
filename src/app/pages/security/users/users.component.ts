@@ -53,40 +53,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
   edit: boolean = false;
   delete: boolean = false;
   activeArr: any[] = [];
-  // dataGridInstance: DataGrid;
-  yesnoList: any = [
-    {
-      id: false,
-      text: 'نشط'
-    },
-    {
-      id: true,
-      text: 'غير نشط'
-    }
-  ];
-
-  usertypesList: any = [
-    {
-      id: 1,
-      name: 'عميل'
-    },
-    {
-      id: 2,
-      name: 'بقالة'
-    },
-    {
-      id: 3,
-      name: 'مالك'
-    },
-    /* {
-       id: 4,
-       name: 'عامل توصيل'
-     },*/
-    {
-      id: 5,
-      name: 'ادمن'
-    }
-  ];
+  usertypes: any = [];
 
   disabledSelection=[]=[
     {id:'true',nameAr:'غير نشط',nameEn:'Is Disabled'},
