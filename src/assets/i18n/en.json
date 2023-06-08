@@ -202,7 +202,18 @@
     }
 
   },
+  "toastrMsg":{
+    "youAreLoggedInSuccessfully":"Welcome -- you are logged in Successfully"
+},
+"welcomeBack":"Welcome Back",
+"lookForEmail":"Looking for user By Email",
+    "areYouForgetPass":"are you forget your password",
+    "chcekCodeVerifi":"verificaty code",
   "noUserFound":"Not found any User by this Email please Check again",
+  "rightCodePleasTypeNewPass":"you entred right code please type new Password",
+  "passChangedSuccess":"Passwrod Has Changed Successfully",
+  "verificationCode":"Verification Code",
+  "changePassword":"Changed Password",
   "add":"add",
   "edit":"edit",
   "delete":"delete",
@@ -210,6 +221,7 @@
   "search":"search",
   "save":"save",
   "cancel":"cancel",
+  "back":"Back",
   "LookUps":"general defintions",
   "Organization":"Organization",
   "Mamagements":"Mamagements",
@@ -253,7 +265,10 @@
     "name": "Name",
     "userName": "Usernme",
     "password": "ُPassword",
+    "newPassword":"New Password",
+    "Confirmpassword":"Confirm Password",
     "email": "Email",
+    "login":"LogIn",
     "mobile": "Mobile",
     "isActive": "Status",
     "roles": "Roles",

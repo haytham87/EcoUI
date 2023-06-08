@@ -41,6 +41,10 @@ import { BaseService } from '../base/base.service';
       return this.base.save(this.controller + '/ChangePassword', obj);
     }
   
+    resetPassword(obj: User) {
+      return this.base.save(this.controller + '/ResetPassword', obj);
+    }
+
     getUserByUserName(username: string) {
       return this.base.gets(this.controller + '/GetUserByUserName/' + username)
     }

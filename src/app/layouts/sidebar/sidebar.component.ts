@@ -47,7 +47,7 @@ export class SidebarComponent implements OnInit {
     public elementRef: ElementRef,
     public authService: AuthService
   ) {
-    translate.setDefaultLang('ar');
+    translate.setDefaultLang(localStorage.getItem('lang'));
     router.events.forEach((event) => {
       if (event instanceof NavigationEnd) {
         this._activateMenuDropdown();

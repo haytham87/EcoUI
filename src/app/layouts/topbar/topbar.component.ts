@@ -5,8 +5,6 @@ import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 import { LanguageService } from '../../core/services/language.service';
-import { environment } from '../../../environments/environment';
-import { AuthfakeauthenticationService } from '../../core/services/authfake.service';
 import { TranslateService } from '@ngx-translate/core';
 import { AuthService } from 'src/app/core/services/sc/auth.service';
 
@@ -34,7 +32,6 @@ export class TopbarComponent implements OnInit {
     private authService: AuthService,
     public languageService: LanguageService,
     public _cookiesService: CookieService,
-    private authFackservice: AuthfakeauthenticationService,
     private renderer: Renderer2,
     public translate: TranslateService,
     public baseService:BaseService
@@ -140,6 +137,9 @@ export class TopbarComponent implements OnInit {
     document.getElementsByTagName('html')[0].setAttribute('dir', 'ltr');
     this.renderer.addClass(this.document.body,'ltr');
     this.baseService.isRTL= false;
+    localStorage.setItem('lang','en');
+    localStorage.setItem('dir','ltr');
+    this.baseService.lang='en';
     this.translate.use('en');
     this.dir = false;
   }
@@ -148,6 +148,9 @@ export class TopbarComponent implements OnInit {
     document.getElementsByTagName('html')[0].setAttribute('dir', 'rtl');
     this.renderer.addClass(this.document.body,'rtl');
     this.baseService.isRTL= true;
+    localStorage.setItem('lang','ar');
+    localStorage.setItem('dir','rtl');
+    this.baseService.lang='ar';
     this.translate.use('ar');
     this.dir = true;
   }

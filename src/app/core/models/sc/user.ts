@@ -37,6 +37,7 @@ export class User {
   userTypeNameAr:string
   userTypeNameEn:string
   receveCode:number;
+  confirmPassword: string;
 }
 
 export interface UserChangePassword {

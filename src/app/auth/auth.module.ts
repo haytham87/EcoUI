@@ -7,6 +7,7 @@ import { NgOtpInputModule } from  'ng-otp-input';
 
 import { LoginComponent } from './login/login.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   declarations: [
     LoginComponent,
@@ -17,6 +18,7 @@ import { ForgetPasswordComponent } from './forget-password/forget-password.compo
     AuthRoutingModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslateModule,
     NgOtpInputModule
   ]
 })

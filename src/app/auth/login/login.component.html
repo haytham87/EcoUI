@@ -14,7 +14,7 @@
                             <div class="p-lg-5 p-4">
 
                                 <div>
-                                    <h5>مرحباً بك</h5>
+                                    <h5>{{'welcomeBack'|translate}}</h5>
                                     <p class="text-muted"></p>
                                 </div>
 
@@ -22,70 +22,89 @@
                                     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
                                         <div class="mb-3">
-                                            <label for="email" class="fw-semibold">البريد الالكتروني</label>
-                                            <input type="text" formControlName="email" class="form-control" id="email"
-                                            [(ngModel)]="user.username" placeholder="اسم المستخدم">
+                                            <label for="email" class="fw-semibold">{{'security.email'|translate}}</label>
+                                            <input type="text" formControlName="email" class="form-control" id="email" required
+                                            [(ngModel)]="user.username" placeholder="{{'security.userName' | translate}}">
                                         </div>
 
                                         <div class="mb-3 mb-4">
-                                            <label for="userpassword" class="fw-semibold">كلمة المرور</label>
-                                            <input type="password" formControlName="password" class="form-control"
-                                            [(ngModel)]="user.password"  id="userpassword" placeholder="ادخل كلمة المرور">
+                                            <label for="userpassword" class="fw-semibold">{{'security.password'| translate}}</label>
+                                            <input type="password" formControlName="password" class="form-control" required
+                                            [(ngModel)]="user.password"  id="userpassword" placeholder="{{'security.password'|translate}}">
                                         </div>
 
                                         <div class="row align-items-center">
-                                            <div class="col-6">
+                                            <!-- <div class="col-6">
                                                 <div class="form-check">
                                                     <input type="checkbox" class="form-check-input font-size-16"
                                                         id="remember-check">
                                                     <label class="form-check-label" for="remember-check">تذكرني</label>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col-6">
                                                 <div class="text-end">
                                                     <button class="btn btn-primary w-md waves-effect waves-light"
-                                                        type="submit">تسجيل الدخول</button>
+                                                        type="submit">{{'security.login'|translate}}</button>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="mt-4">
-                                            <a (click)="showForget()" class="text-muted"><i
-                                                    class="mdi mdi-lock me-1"></i> هل نسيت كلمة المرور؟</a>
+                                            <a (click)="showForget()" class="text-muted" style="cursor: pointer;"><i
+                                                    class="mdi mdi-lock me-1" ></i> {{'areYouForgetPass'|translate}}</a>
                                         </div>
                                     </form>
                                 </div>
 
 
                                 <div class="mt-4 pt-3" *ngIf="this.forgetPsw==true">
-                                    <form >
+                                    <form #forgForm="ngForm" id="forgForm" class="needs-validation" novalidate>
 
                                         <div class="mb-3" *ngIf="typeCode==false">
-                                            <label for="email" class="fw-semibold">البريد الالكتروني</label>
-                                            <input type="text" name="email" class="form-control" id="email"
-                                            [(ngModel)]="user.email" placeholder="البريد الالكتروني">
+                                            <label for="email" class="fw-semibold">{{'security.email' | translate}}</label>
+                                            <input type="text" name="email" class="form-control" id="email" email required
+                                            [(ngModel)]="user.email" placeholder="{{'security.email' | translate}}">
                                         </div>
-                                        <div class="mb-3" *ngIf="typeCode==true">
-                                            <label for="email" class="fw-semibold">كود التحقق</label>
+                                        <div class="mb-3" *ngIf="typeCode==true&&codeDone==false">
+                                            <label for="email" class="fw-semibold">{{'verificationCode'| translate}}</label>
                                             <input type="text" name="receveCode" class="form-control" id="email"
-                                            [(ngModel)]="user.receveCode" placeholder="كود التحقق">
+                                            [(ngModel)]="user.receveCode" placeholder="{{'verificationCode'| translate}}">
                                         </div>
+                                        <div *ngIf="codeDone">
+                                            <form>
+                                                <div class="mb-3" >
+                                                    <label for="password" class="fw-semibold">{{'security.newPassword'| translate}}</label>
+                                                    <input type="password" name="password" class="form-control" id="password"
+                                                    [(ngModel)]="user.password" placeholder="{{'security.newPassword'| translate}}">
+                                                </div>
+                                                <div class="mb-3 mb-4">
+                                                    <label for="confirmPassword" class="fw-semibold">{{'security.Confirmpassword'| translate}}</label>
+                                                    <input type="password" name="confirmPassword" class="form-control" required
+                                                    [(ngModel)]="user.confirmPassword"  id="userpassword" placeholder="{{'security.password'|translate}}">
+                                                </div>
+                                            </form>
+                                            
+                                        </div>
+                                       
                                         <div class="row align-items-center">
                                             
                                             <div class="col-6" >
                                                 <div class="text-end">
-                                                    <button *ngIf="typeCode==false" class="btn btn-primary w-md waves-effect waves-light ml-3" (click)="checkUserNameExsit()"
-                                                        >البحث عن ايميل المستخدم</button>
+                                                    <button [disabled]="!(forgForm.valid&& forgForm.dirty)"  *ngIf="typeCode==false&&codeDone==false" class="btn btn-primary w-md waves-effect waves-light ml-3" (click)="checkUserNameExsit()"
+                                                        >{{'lookForEmail'| translate}}</button>
 
-                                                      <button *ngIf="typeCode==true" class="btn btn-primary w-md waves-effect waves-light ml-3" (click)="checkCode()">
-                                                         التحقق وتغيير كلمة المرور
+                                                      <button *ngIf="typeCode==true&&codeDone==false" class="btn btn-primary w-md waves-effect waves-light ml-3" (click)="checkCode()">
+                                                         {{'chcekCodeVerifi'| translate}}
                                                       </button>  
+
+                                                     <button *ngIf="codeDone==true" class="btn btn-primary w-md waves-effect waves-light ml-3" 
+                                                     [disabled]="this.user.password!==this.user.confirmPassword" (click)="changePassword()">{{'changePassword'|translate}}</button>
                                                 </div>
                                             </div>
                                             <div class="col-6">
                                                 <div class="text-end">
                                                     <button class="btn btn-primary w-md waves-effect waves-light mr-3" (click)="showLogin()"
-                                                        >تسجيل الدخول</button>
+                                                        >{{'security.login'| translate}}</button>
                                                 </div>
                                             </div>
                                         </div>

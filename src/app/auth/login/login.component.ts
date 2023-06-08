@@ -1,8 +1,8 @@
 import { VerificationService } from './../../core/services/verification.service';
 import { takeUntil } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertService } from 'src/app/core/services/base/alert.service';
@@ -25,6 +25,8 @@ const Swal = require('sweetalert2');
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent  extends BaseComponent implements OnInit {
+  @ViewChild('forgForm',{static:true})forgForm :NgForm;
+  @ViewChild('changPassForm',{static:true})changPassForm :NgForm;
   user={} as User;
   loginForm: FormGroup;
   submitted = false;
@@ -33,10 +35,10 @@ export class LoginComponent  extends BaseComponent implements OnInit {
   screens: any;
   forgetPsw:boolean=false;
   year: number = new Date().getFullYear();
-
+updateUser={} as User;
   verifiCode:any;
   typeCode:boolean=false;
-
+  codeDone=false;
 
   constructor(
     private route: ActivatedRoute,
@@ -156,17 +158,23 @@ export class LoginComponent  extends BaseComponent implements OnInit {
       this.baseService.blockStart();
       this.userService.getUserByUserName(this.user.email).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
         (apiData:ApiObjectData)=>{
-          this.baseService.blockStop();
+          
           if(apiData.message.type==='Success'){
+            this.updateUser = apiData.returnData as User;
             this.verificationService.get(this.user.email).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
               (verif:ApiObjectData)=>{
                 if(verif.message.type==='Success'){
+                  this.baseService.blockStop();
                 this.verifiCode  = verif.returnData ;
                 this.alertService.success('تم إرسال الكود الخاص بك على البريد الالكتروني')
                 this.typeCode=true;
               }
-                else
+                else{
+                  this.baseService.blockStop();
+                  this.user ={} as User;
                   this.alertService.error(verif.message.content);
+                }
+                  
               },error=>{
                 this.alertService.error(error);
                 this.baseService.blockStop();
@@ -179,7 +187,7 @@ export class LoginComponent  extends BaseComponent implements OnInit {
           }
         },error=>{
           this.baseService.blockStop();
-          this.alertService.error(error);
+          this.alertService.error(error.error);
         }
       )
     }
@@ -187,9 +195,32 @@ export class LoginComponent  extends BaseComponent implements OnInit {
 
   checkCode(){
     if(this.user.receveCode==this.verifiCode){
-      this.alertService.success('تم تغيير كلمة المرور وارسالها على البريد الالكتروني')
+      this.alertService.success(this.translate.instant('rightCodePleasTypeNewPass'));
+      this.codeDone=true;
     }
     else  
-      this.alertService.warning('يرجي التاكد من كود التحقق المرسل هلى البريد الالكتروني')
+      this.alertService.warning('يرجي التاكد من كود التحقق المرسل على البريد الالكتروني')
+  }
+
+  changePassword(){
+    this.user.id= this.updateUser.id;
+    if(this.user.id!=0&&(this.user.email!==null||this.user.email!=='')&&this.user.password==this.user.confirmPassword){
+      this.baseService.blockStart();
+      this.userService.resetPassword(this.user).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+        (user:ApiObjectData|any)=>{
+          this.baseService.blockStop();
+          if(user.message.type==='Success'){
+            this.alertService.success(this.translate.instant('passChangedSuccess'))
+            this.forgetPsw=false;
+          }
+          else{
+            this.alertService.error(user.message.content);
+          }
+        },error=>{
+          this.baseService.blockStop();
+          this.alertService.error(error.error);
+        }
+      )
+    }
   }
 }

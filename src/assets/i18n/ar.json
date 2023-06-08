@@ -109,7 +109,18 @@
           }
         }
     },
+    "toastrMsg":{
+        "youAreLoggedInSuccessfully":"مرحبا بك -- تم تسجيل دخولك بنجاح"
+    },
+    "welcomeBack":" مرحباً بك مجدداً",
+    "lookForEmail":"البحث عن ايميل المستخدم",
+    "areYouForgetPass":"هل نسيت كلمة المرور؟",
+    "chcekCodeVerifi":"التحقق من الكود",
     "noUserFound":"لا يوجد مستخدم لهذا البريد برجاء التحقق من البريد المدخل",
+    "rightCodePleasTypeNewPass":"الكود المسجل صحيح برجاء كتابة كلمة مرور جديدة",
+    "passChangedSuccess":"تم تغيير كلمة المرور بنجاخ ",
+    "verificationCode":"كود التحقق",
+    "changePassword":"تغيير كلمة المرور",
     "add":"إضافة",
     "edit":"تعديل",
     "delete":"حذف",
@@ -161,7 +172,10 @@
         "description": "الوصف",
         "name": "الاسم",
         "userName": "اسم المستخدم",
-        "password": "ُكلمة المرور",
+        "password": "كلمة المرور",
+        "newPassword":"كلمة المرور الجديدة",
+        "Confirmpassword":"تاكيد كلمة المرور",
+        "login":"تسجيل الدخول",
         "email": "البريد الالكتروني",
         "mobile": "رقم الجوال",
         "isActive": "الحالة",
