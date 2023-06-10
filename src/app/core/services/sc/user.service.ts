@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ApiObjectData } from '../../models/apiObjectData';
 import { Observable } from 'rxjs';
-import { User, UserChangePassword } from '../../models/auth.models';
 import { BaseService } from '../base/base.service';
+import { User } from '../../models/sc/user';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +37,9 @@ import { BaseService } from '../base/base.service';
       return this.base.gets(this.controller + '/CheckUserNameExist/' + userName)
     }
   
-    ChangePassword(obj: UserChangePassword) {
-      return this.base.save(this.controller + '/ChangePassword', obj);
-    }
+    // ChangePassword(obj: UserChangePassword) {
+    //   return this.base.save(this.controller + '/ChangePassword', obj);
+    // }
   
     resetPassword(obj: User) {
       return this.base.save(this.controller + '/ResetPassword', obj);
@@ -48,11 +48,7 @@ import { BaseService } from '../base/base.service';
     getUserByUserName(username: string) {
       return this.base.gets(this.controller + '/GetUserByUserName/' + username)
     }
-  
-    changePasswordByOtp(obj: UserChangePassword) {
-      return this.base.save(this.controller + '/ChangePasswordByOtp', obj);
-    }
-  
+    
     searchInUser(obj: User) {
       return this.base.save(this.controller+'/SearchInUser', obj);
     }

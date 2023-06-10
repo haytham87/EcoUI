@@ -132,21 +132,21 @@
     
 
             <dx-popup class="popup" [rtlEnabled]="this.baseService.isRTL" [showTitle]="true"
-              title="{{'addRole' | translate}}" [dragEnabled]="false" [(visible)]="popRoleVisible" [maxWidth]="'65.5%'"
-              [maxHeight]="'40%'">
+              title="{{'roleData' | translate}}" [dragEnabled]="false" [(visible)]="popRoleVisible" [maxWidth]="'65.5%'"
+              [maxHeight]="'77%'">
               <dx-scroll-view>
                 <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
-                  <form>
-                    <div class="row">
+                  <form #roleForm="ngForm" id="roleForm" class="needs-validation" novalidate>
+                    <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="label">{{'nameAr' | translate}}</label>
+                        <label class="label mb-3">{{'nameAr' | translate}}</label>
                         <div class="form-group">
                           <dx-text-box placeholder="{{'nameAr' | translate}}" id="roleNameAr" name="nameAr" ngModel
                             required #txtnameAr="ngModel" [(ngModel)]="newRole.nameAr"></dx-text-box>
                         </div>
                       </div>
                       <div class="col-md-6">
-                        <div class="label">{{'nameEn' | translate}}</div>
+                        <label class="label mb-3">{{'nameEn' | translate}}</label>
                         <div class="form-group">
                           <dx-text-box placeholder="{{'nameEn' | translate}}" id="roleNameEn" name="nameEn" ngModel
                             required #txtnameEn="ngModel" [(ngModel)]="newRole.nameEn"></dx-text-box>
@@ -155,19 +155,19 @@
                     </div>
                     <div class="row">
                       <div class="col-md-12">
-                        <div class="label">{{'nameEn' | translate}}</div>
+                        <label class="label mb-3">{{'description' | translate}}</label>
                         <div class="form-group">
-                        <!-- <textarea ngModel [(ngModel)]="newRole.description" rows="6" class="textarea" name="description" ></textarea> -->
+                        <dx-text-area ngModel [(ngModel)]="newRole.description" rows="8"  name="description" ></dx-text-area>
                         </div>
                       </div>
                     </div>
                   </form>
                   <div class="form-actions mt-5">
                     <div class="button-items">
-                      <button type="submit"  class="btn btn-success"
+                      <button type="submit"  class="btn btn-success"  [disabled]="!(roleForm.valid&& roleForm.dirty)" 
                         form="searchForm" (click)="saveRole()"><i class="fas fa-save"></i>
-                        {{'search' | translate}}</button>
-                      <button  class="btn btn-danger" ><i class="ft-x"></i>{{'back'
+                        {{'save' | translate}}</button>
+                      <button  class="btn btn-danger" (click)="hideRolePopup()"><i class="ft-x"></i>{{'back'
                         | translate}}</button>
                     </div>
 

@@ -1,28 +1,139 @@
-<div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="card">
-          <div class="card-header">
-  
-            <div class=" btn-showcase">
-              <button type="button" class="btn btn-success mr-3" (click)="addCategory()">
-                <i class="fa fa-plus"></i> {{'add' | translate}}
-              </button>
-              <button type="button" [class]="this.itemCategoryId===0? 'btn btn-light mr-3': 'btn btn-info mr-3'"
-                (click)="showPopCategory()" [disabled]="this.itemCategoryId===0">
-                <i class="fa fa-edit"></i> {{'edit' | translate}}
-              </button>
-              <button type="button" [class]="this.itemCategoryId===0? 'btn btn-light mr-3': 'btn btn-danger mr-3'"
-                [disabled]="this.itemCategoryId===0" (click)="deleteCategoryRow()">
-                <i class="fa fa-trash"></i> {{'delete' | translate}}
-              </button>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <span>
+                            <i class="mdi mdi-account-group"></i>
+                            <h4 class="card-title mb-2" *ngIf="pageType==='add'">{{"item.addItem" | translate}}</h4>
+                            <h4 class="card-title mb-2" *ngIf="pageType==='edit'">{{"item.editItem" | translate}}</h4>
+                        </span>
+                        <div class="col-lg-12">
+                            <div class="button-items">
+                                <div #headerActions>
+                                    <button type="button" class="btn btn-success" accessKey="save"
+                                     [disabled]="!(editForm.valid&&editForm.dirty)" (click)="saveItem()">
+                                        <i class=" fas fa-save"></i> {{'save' | translate}}
+                                    </button>
+                                    <button type="button" class="btn btn-info" accessKey="edit" [routerLink]="'/page/item'">
+                                        <i class=" fas fa-backward"></i> {{'back' | translate}}
+                                    </button>
+                                    <button type="button" class="btn btn-danger" accessKey="delete">
+                                        <i class=" fa fa-trash"></i> {{'delete' | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form class="form" #editForm="ngForm" id="editForm" class="needs-validation" novalidate>
+                                    <div class="card-body">
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="label mb-2">{{'item.Category'|translate}}</label>
+                                                <div class="form-value">
+                                                    <dx-select-box id="categoryId" name="categoryId"
+                                                        [dataSource]="categories" class="borderStyle"
+                                                        [searchEnabled]="true" [rtlEnabled]="this.baseService.isRTL"
+                                                        [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'" required
+                                                        valueExpr="id" [(ngModel)]="item.categoryId" ngModel (onSelectionChanged)="onCategorySelectedChanged($event)"
+                                                        #categoryId="ngModel" [searchEnabled]="true">
+                                                    </dx-select-box>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="label mb-2">{{'item.brand'|translate}}</label>
+                                                <dx-select-box id="brandId" name="brandId" [dataSource]="brands"
+                                                    class="borderStyle" [searchEnabled]="true"
+                                                    [rtlEnabled]="this.baseService.isRTL" required
+                                                    [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
+                                                    valueExpr="id" [(ngModel)]="item.brandId" ngModel
+                                                    #categoryId="ngModel" [searchEnabled]="true">
+                                                </dx-select-box>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-md-4">
+                                                <label class="label mb-2">{{'code'|translate}}</label>
+                                                <dx-text-box placeholder="{{'code' | translate}}" id="txtcode"
+                                                    name="code" ngModel required #txtinvoiceNo="ngModel" (onValueChanged)="checkCode($event)"
+                                                    [(ngModel)]="item.code"></dx-text-box>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="label mb-2">{{'nameAr'|translate}}</label>
+                                                <dx-text-box placeholder="{{'nameAr' | translate}}" id="txtnameAr"
+                                                    name="nameAr" ngModel ArabicChar required #txtnameAr="ngModel"
+                                                    [(ngModel)]="item.nameAr"></dx-text-box>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="label mb-2">{{'nameEn'|translate}}</label>
+                                                <dx-text-box placeholder="{{'nameEn' | translate}}" id="txtnameEn"
+                                                    name="nameEn" ngModel EnglishChar required #txtnameEn="ngModel"
+                                                    [(ngModel)]="item.nameEn"></dx-text-box>
+                                            </div>
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-md-4">
+                                                <label class="label mb-2">{{'item.sample'|translate}}</label>
+                                                <br>
+                                                <dx-check-box id="isSample" [(ngModel)]="item.isSample" [value]="item.isSample" name="isSample" (onValueChanged)="onCheckedChanged($event)"></dx-check-box>
+                                            </div>
+                                            <div class="col-md-8" *ngIf="sample===true">
+                                                <label class="label mb-2">{{'item.parentItem'|translate}}</label>
+                                                <dx-select-box id="parentId" name="patentId" [dataSource]="items"
+                                                    class="borderStyle" [searchEnabled]="true"
+                                                    [rtlEnabled]="this.baseService.isRTL" required 
+                                                    (onValueChanged)="onParentChanged($event)"
+                                                    [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
+                                                    valueExpr="id" [(ngModel)]="item.parentId" ngModel
+                                                    #categoryId="ngModel" [searchEnabled]="true">
+                                                </dx-select-box>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="row mt-3" *ngIf="itemsPhotos===[]&&this.itemId!==0">
+                                            <label>{{'addImage'|translate}}</label>
+                                            <label for="categoryImg_input"
+                                            title="{{'Category.uploadImage' | translate}}"
+                                            class="input_file_label d-flex align-items-center"
+                                            id="categoryImg">
+                                            <i class="fas fa-cloud-upload-alt"
+                                                style="cursor: pointer;"></i>
+                                        </label>
+                                        <input [dir]="this.baseService.isRTL?'rtl':'ltr'" type="file" id="categoryImg_input" class="input_file_label d-flex align-items-center"
+                                        accept="image/x-png,image/gif,image/jpeg,application/pdf" hidden 
+                                        (change)="onFileChanged($event)">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row mt-5" *ngIf="itemAdded===true">
+                            <div class="col-lg-12">
+                                <div class="row" >
+                                    <div class="text-center" *ngIf="itemId!==0">
+                                      <label accesskey="add" for="updateImg" class="btn btn-primary btn-lg  fas fa-images" (click)="addImage()" ngbTooltip="{{'addImage'|translate}}"></label>
+                                    </div>
+                                    <div class="col-lg-2 col-md-12 mb-3" *ngFor="let photo of itemsPhotos" >
+                                        <img [src]="this.baseService.appUrl +photo.photoUrl" alt="CatPhoto" data-holder-rendered="true" class="rounded-circle avatar-xl thumbnail">
+                                        <div #headerActions class="button-items text-center mt-3" >
+                                            <button accesskey="edit" *ngIf="!photo.isMain" class="btn btn-success btn-sm" (click)="setMainPhoto(photo.id)">{{'Category.mainPhoto'|translate}}</button>
+                                            <label accesskey="edit" for="updateImg" class="btn btn-warning btn-sm" (click)="onPhotClicked(photo.id)">{{'edit'|translate}}</label>
+                                            <input type="file" id="updateImg" accept="image/x-png,image/gif,image/jpeg,application/pdf" (change)="onFileUpdate($event)" hidden/>
+                                            <button accesskey="delete" class="btn btn-danger btn-sm" (click)="deletePhoto(photo.id)">{{'delete'|translate}}</button>
+                                        </div>
+                                       
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            
-          </div>
-
         </div>
-      </div>
     </div>
-  </div>
-  
+</div>

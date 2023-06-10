@@ -11,11 +11,9 @@ import { MaterialdesignComponent } from './icons/materialdesign/materialdesign.c
 import { BasicComponent } from './tables/basic/basic.component';
 import { ChartsComponent } from './charts/charts.component';
 import { UiComponent } from './ui/ui.component';
-import { CategoryComponent } from './mainData/category/category.component';
 import { ItemsComponent } from './mainData/items/items.component';
 import { ItemComponent } from './mainData/item/item.component';
 import { BrandsComponent } from './mainData/brands/brands.component';
-import { BrandComponent } from './mainData/brand/brand.component';
 import { UsersComponent } from './security/users/users.component';
 import { UsersResolver } from '../core/resolvers/sc/user.resolver';
 import { RolesResolver } from '../core/resolvers/sc/role.resolver';
@@ -24,6 +22,8 @@ import { RolesComponent } from './security/roles/roles.component';
 import { MenusResolver } from '../core/resolvers/sc/menu.resolver';
 import { ScreensResolver } from '../core/resolvers/sc/screen.resolver';
 import { CategoriesResolver, CategoryResolver } from '../core/resolvers/st/category.resolver';
+import { ItemResolver, ItemsResolver } from '../core/resolvers/st/item.resolver';
+import { BrandsResolver } from '../core/resolvers/st/brand.resolver';
 
 
 const routes: Routes = [
@@ -43,31 +43,42 @@ const routes: Routes = [
     }
   },
   {
-    path:'category/:type/:id',
-    component:CategoryComponent,
+    path:'brand',
+    component:BrandsComponent,
     data:{
-      title:'Categories',
-      breadcrumb:'Categories'
+      title:'Brand',
+
     },
     resolve:{
-      itemCategories:CategoryResolver
+      brands:BrandsResolver,
+      categories:CategoriesResolver
     }
   },
   {
-    path:'brand',
-    component:BrandsComponent
-  },
-  {
-    path:'brand/:type/:id',
-    component:BrandComponent
-  },
-  {
     path:'item',
-    component:ItemsComponent
+    component:ItemsComponent,
+    data:{
+      title:'Items',
+      breadcrumb:'Items'
+    },
+    resolve:{
+      items:ItemsResolver,
+      categories:CategoriesResolver,
+      brands: BrandsResolver
+    }
   },
   {
     path:'item/:type/:id',
-    component:ItemComponent
+    component:ItemComponent,
+    data:{
+      title:'Items',
+      breadcrumb:'Items'
+    },
+    resolve:{
+      categories:CategoriesResolver,
+      item:ItemResolver,
+      items:ItemsResolver
+    }
   },
   {
     path:'users',

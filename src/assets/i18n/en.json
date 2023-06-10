@@ -214,6 +214,10 @@
   "passChangedSuccess":"Passwrod Has Changed Successfully",
   "verificationCode":"Verification Code",
   "changePassword":"Changed Password",
+  "thisCodeExist":"This Code Exist Please Check again",
+  "actions":"actions",
+  "description":"description",
+  "roleData":"Role Data",
   "add":"add",
   "edit":"edit",
   "delete":"delete",
@@ -222,10 +226,13 @@
   "save":"save",
   "cancel":"cancel",
   "back":"Back",
+  "related":"can`t delete this becouse related with another data" ,
+  "SavedSuccess":"Saved Successfully",
   "LookUps":"general defintions",
   "Organization":"Organization",
   "Mamagements":"Mamagements",
   "Departments":"Departments",
+  "code":"Code",
   "name":"Name",
   "nameAr":"name in arabic",
   "nameEn":"name in English",
@@ -285,5 +292,16 @@
     "personType": "Groups",
     "rank": "Rank",
     "unit": "Unit"
+  },
+  "item":{
+    "name":"Name",
+    "code":"Code",
+    "Category":"Category",
+    "brand":"Brand",
+    "sample":"Sample",
+    "addItem":"Add Item",
+    "editItem":"Edit Item",
+    "parentItem":"Parent Item",
+    "parentSameId":"Parent Same Item it`s can`t be"
   }
 }

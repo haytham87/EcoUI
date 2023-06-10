@@ -17,6 +17,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FormService } from 'src/app/core/services/sc/form.service';
 import { RoleScreenService } from 'src/app/core/services/sc/role-form.service';
 import { RoleMenu } from 'src/app/core/models/sc/roleMenu';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'roles',
@@ -28,7 +29,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
   @ViewChild('treeList', { static: false }) treeList: DxTreeListComponent;
   @ViewChild('treeListCategory', { static: false }) treeListCategory: DxTreeListComponent;
   @ViewChild("headerActions") headerActions: ElementRef;
-
+  @ViewChild('roleForm', {static:true}) roleForm:NgForm;
   itemsDataSource: Role[];
   role: Role;
   newRole={} as Role;
@@ -164,6 +165,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
         this.baseService.blockStop();
         // this.organizations = data.organizations.returnData;
         this.itemsDataSource = data.itemsDataSource.returnData;
+        console.log(this.itemsDataSource)
         this.backRoles = this.itemsDataSource;
         this.menus = data.menus.returnData;
         this.screens = data.screens.returnData;
@@ -231,12 +233,14 @@ export class RolesComponent extends BaseComponent implements OnInit {
   }
 
   saveRole(){
+    debugger
     this.baseService.blockStart();
+    this.newRole.roleForms=[];this.newRole.roleMenus=[]
     this.roleService.save(this.newRole).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       (roleData:ApiObjectData|any)=>{
         this.baseService.blockStop();
         if(roleData.message.type==='Success'){
-          this.itemsDataSource.push(roleData.returnData);
+          this.itemsDataSource =(roleData.returnData);
           this.alertService.success('تم الحفظ بنجاح');
           this.popRoleVisible = false;
         }
@@ -412,7 +416,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
   saveSelectedItems() {
     debugger
     this.dataModel.roleId = this.itemId;
-    this.dataModel.roleMenus = this.treeList.instance.getSelectedRowKeys('leavesOnly');
+    this.dataModel.roleMenus = this.treeList.instance.getSelectedRowKeys('all');
 
     // Handle asynchronous work by using promise
     // const promise = new Promise<void>((resolve, reject) => {

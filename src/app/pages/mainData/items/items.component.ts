@@ -1,33 +1,57 @@
+import { UploadService } from './../../../core/services/bs/upload.service';
+import { ItemPhotoService } from './../../../core/services/st/item-photo.service';
 import { takeUntil } from 'rxjs/operators';
 import { Item } from './../../../core/models/st/item';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BaseComponent } from '../../base/base/base.component';
 import { Category } from 'src/app/core/models/st/category';
 import DataGrid from 'devextreme/ui/data_grid';
 import { BaseService } from 'src/app/core/services/base/base.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AlertService } from 'src/app/core/services/base/alert.service';
 import { ItemService } from 'src/app/core/services/st/item.service';
 import { ApiObjectData } from 'src/app/core/models/apiObjectData';
+import { Brand } from 'src/app/core/models/st/brand';
+import { DxoGridComponent } from 'devextreme-angular/ui/nested';
+import { ItemPhoto } from 'src/app/core/models/st/itemPhoto';
+import { TranslateService } from '@ngx-translate/core';
+
+declare var require;
+const Swal = require('sweetalert2');
 
 @Component({
   selector: 'items',
   templateUrl: './items.component.html',
-  styleUrls: ['./items.component.scss']
+  styleUrls: ['./items.component.scss'],
 })
 export class ItemsComponent extends BaseComponent implements OnInit {
+  @ViewChild('gridItems', { static: false }) gridItems: DxoGridComponent;
   itemId = 0;
   height = 0;
   dataGridInstance: DataGrid;
   items: Item[];
   item: Item;
-  category: Category[];
+  categories: Category[];
+  brands: Brand[];
+  itemsPhoto: ItemPhoto[];
+  itemPhoto = {} as ItemPhoto;
+  photoId: number = 0;
+  forAddPic: boolean = false;
+  downloads: any[];
+  file: File = null;
+  userScreens: any;
   constructor(
     private itemService: ItemService,
     public baseService: BaseService,
     private route: ActivatedRoute,
-    private alertService: AlertService
-  ) { super(); }
+    private alertService: AlertService,
+    private itemPhotoService: ItemPhotoService,
+    private uploadService: UploadService,
+    private translate: TranslateService,
+    private router: Router
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.height = window.innerHeight - 312;
@@ -35,13 +59,14 @@ export class ItemsComponent extends BaseComponent implements OnInit {
   }
 
   loadData() {
+    this.userScreens = localStorage.getItem('userScreens');
     this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-      data => {
+      (data) => {
         this.items = data.items.returnData;
-        // this.itemTypes = data.itemTypes.returnData;
-        // this.itemUnit = data.itemUnit.returnData;
+        this.categories = data.categories.returnData;
+        this.brands = data.brands.returnData;
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
@@ -60,36 +85,13 @@ export class ItemsComponent extends BaseComponent implements OnInit {
     }
   }
 
-  onRowRemoving(e) {
-    this.removeItem(e);
+  addItem() {
+    this.router.navigateByUrl('/page/item/add/0', { skipLocationChange: true });
   }
 
-  deleteRow() {
-    this.dataGridInstance.deleteRow(
-      this.dataGridInstance.getRowIndexByKey(this.itemId)
-    );
-  }
-
-  removeItem(ev) {
-    const promise = new Promise<void>((resolve, reject) => {
-      this.itemService.remove(ev.key).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
-        (apiObjectData: any) => {
-          this.alertService.message(apiObjectData.message);
-          if (apiObjectData.message.type === 'Success') {
-            this.itemId = 0;
-            resolve();
-          } else {
-            reject();
-          }
-        },
-        error => {
-          console.log(error);
-          reject();
-        }
-      );
+  editItem() {
+    this.router.navigateByUrl('/page/item/edit/' + this.itemId, {
+      skipLocationChange: true,
     });
-    ev.cancel = promise;
   }
-
-
 }

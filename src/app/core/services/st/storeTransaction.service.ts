@@ -8,7 +8,7 @@ import { BaseService } from '../base/base.service';
   providedIn: 'root'
 })
 export class StoreTransactionService {
-  controller = 'Store';
+  controller = 'StoreTransaction';
   constructor(private base: BaseService) { }
 
   get(id: number): Observable<ApiObjectData> {

@@ -56,12 +56,10 @@ import { ArabicCharDirective } from '../core/directives/arabicChar.directive';
 import { AlphabetOnlyDirective } from '../core/directives/alphabet-only.directive';
 import { EnglishCharDirective } from '../core/directives/englishChar.directive';
 import { SafePipe } from '../core/pipe/safe.pipe';
-import { CategoryComponent } from './mainData/category/category.component';
 import { ItemsComponent } from './mainData/items/items.component';
 import { ItemComponent } from './mainData/item/item.component';
 import { CategoriesComponent } from './mainData/categories/categories.component';
 import { BrandsComponent } from './mainData/brands/brands.component';
-import { BrandComponent } from './mainData/brand/brand.component';
 import { UsersComponent } from './security/users/users.component';
 import { RolesComponent } from './security/roles/roles.component';
 import { UserComponent } from './security/user/user.component';
@@ -81,12 +79,10 @@ import { UserComponent } from './security/user/user.component';
     BasicComponent,
     ChartsComponent,
     UiComponent,
-    CategoryComponent,
     ItemsComponent,
     ItemComponent,
     CategoriesComponent,
     BrandsComponent,
-    BrandComponent,
     UsersComponent,
     RolesComponent,
     UserComponent

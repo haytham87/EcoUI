@@ -1,6 +1,7 @@
+import { ConfigService } from './../../../core/services/base/config.service';
 import { ItemPhotoService } from './../../../core/services/st/item-photo.service';
 import { UploadService } from './../../../core/services/bs/upload.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 import { ApiObjectData } from 'src/app/core/models/apiObjectData';
 import { BaseComponent } from '../../base/base/base.component';
@@ -31,11 +32,11 @@ const Swal = require('sweetalert2');
 export class CategoriesComponent extends BaseComponent implements OnInit {
   @ViewChild('editForm', { static: true }) editForm: NgForm;
   @ViewChild('treeData', { static: false }) treeData: DxTreeListComponent;
-
+  @ViewChild("headerActions") headerActions: ElementRef;
   
   itemCategory = {} as Category;
   itemCategories: Category[];
-  categoriesPhoto:any[]
+  categoriesPhoto:ItemPhoto[];
   itemPhoto= {} as ItemPhoto;
   itemCategoryId = 0;
   id: number;
@@ -55,6 +56,7 @@ photoId:number=0;
 forAddPic:boolean=false;
     downloads: any[];
     file: File = null;
+    userScreens: any;
   constructor(
     private itemService: ItemService,
     public baseService: BaseService,
@@ -63,7 +65,8 @@ forAddPic:boolean=false;
     private itemCategoryService: CategoryService,
     private itemPhotoService:ItemPhotoService,
     private uploadService:UploadService,
-    private translate :TranslateService
+    private translate :TranslateService,
+    private configService:ConfigService
   ) { super();
     this.downloads = [
       { value: 1, name: 'new row', icon: 'plus' },
@@ -80,7 +83,34 @@ forAddPic:boolean=false;
     this.loadData();
   }
 
+  ngAfterViewInit() {
+    var userScreen = this.userScreens.filter((o) => o.nameEn === "categories")[0];
+    if (userScreen) {
+      for (let i = 0; i < this.headerActions.nativeElement.children.length; i++) {
+        let flag = false;
+        userScreen.action.forEach(userAction => {
+          if (this.headerActions.nativeElement.children[i].accessKey === userAction.nameEn) {
+            flag = true;
+            return;
+          }
+        });
+        if (!flag) {
+          this.headerActions.nativeElement.removeChild(this.headerActions.nativeElement.children[i]);
+          i--;
+        }
+      }
+    }
+    else {
+      for (let i = 0; i < this.headerActions.nativeElement.children.length; i++) {
+        this.headerActions.nativeElement.removeChild(this.headerActions.nativeElement.children[i]);
+        i--;
+      }
+    }
+  }
+
+
   loadData() {
+    this.userScreens = JSON.parse(localStorage.getItem("userScreens"));
     this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       data => {
         this.itemCategories = data.itemCategories.returnData;
