@@ -28,8 +28,16 @@ export class ItemService {
     return this.base.save(this.controller, obj);
   }
 
-  checkCode(code:string){
-    return this.base.gets(this.controller+'/ChecKCode/'+code);
+  stopUseItem(id:number){
+    return this.base.gets(this.controller+'/StopUseItem/'+id);
+  }
+
+  unStopUseItem(id:number){
+    return this.base.gets(this.controller+'/UnStopUseItem/'+id);
+  }
+
+  checkCode(code:string,id:number){
+    return this.base.gets(this.controller+'/ChecKCode/'+code+'/'+id);
   }
 
   remove(id: number) {

@@ -5,6 +5,9 @@ export interface Item{
     nameEn:string;
     brandId:number;
     isSample:boolean;
+    isDisabled:boolean;
+    isDisabledInfoAr:string;
+    isDisabledInfoEn:string;
     brnadNameAr:string;
     brandNameEn:string;
     categoryId:number;

@@ -10,11 +10,12 @@ import { Item } from 'src/app/core/models/st/item';
 import { Category } from 'src/app/core/models/st/category';
 import { NgForm } from '@angular/forms';
 import { Brand } from 'src/app/core/models/st/brand';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntil } from 'rxjs/operators';
 import { ApiObjectData } from 'src/app/core/models/apiObjectData';
 import { TranslateService } from '@ngx-translate/core';
 import { ItemPhoto } from 'src/app/core/models/st/itemPhoto';
+import { DxSelectBoxComponent } from 'devextreme-angular';
 
 declare var require;
 const Swal = require('sweetalert2');
@@ -27,10 +28,10 @@ const Swal = require('sweetalert2');
 export class ItemComponent extends BaseComponent implements OnInit {
   @ViewChild('editForm', { static: true }) editForm: NgForm;
   @ViewChild("headerActions") headerActions: ElementRef;
-
+  @ViewChild("selectParent") selectParent: DxSelectBoxComponent;
   items:Item[];
   item= {} as Item;
-  itemCheck={} as Item;
+  itemCheck:boolean;
   categories: Category[];
   brands:Brand[];
   sample:boolean=false;
@@ -45,6 +46,8 @@ export class ItemComponent extends BaseComponent implements OnInit {
 forAddPic:boolean=false;
     downloads: any[];
     file: File = null;
+    photosLenght:number=0;
+    stoped:boolean=false;
   constructor(
     public baseService:BaseService,
     private itemService:ItemService,
@@ -53,12 +56,39 @@ forAddPic:boolean=false;
     private brandService:BrandService,
     private translate:TranslateService,
     private uploadService:UploadService,
-    private itemPhotoService:ItemPhotoService
+    private itemPhotoService:ItemPhotoService,
+    private router:Router
   ) { super() }
 
   ngOnInit(){
     this.loadData();
   }
+
+  ngAfterViewInit() {
+    var userScreen = this.userScreens.filter((o) => o.nameEn === "item")[0];
+    if (userScreen) {
+      for (let i = 0; i < this.headerActions.nativeElement.children.length; i++) {
+        let flag = false;
+        userScreen.action.forEach(userAction => {
+          if (this.headerActions.nativeElement.children[i].accessKey === userAction.nameEn) {
+            flag = true;
+            return;
+          }
+        });
+        if (!flag) {
+          this.headerActions.nativeElement.removeChild(this.headerActions.nativeElement.children[i]);
+          i--;
+        }
+      }
+    }
+    else {
+      for (let i = 0; i < this.headerActions.nativeElement.children.length; i++) {
+        this.headerActions.nativeElement.removeChild(this.headerActions.nativeElement.children[i]);
+        i--;
+      }
+    }
+  }
+
 
   loadData(){
     this.userScreens = localStorage.getItem('userScreens');
@@ -76,11 +106,14 @@ forAddPic:boolean=false;
         else{
            this.pageType='edit'
            this.item = data.item.returnData;
+           console.log(this.item)
            this.itemAdded=true;
            this.itemId=this.item.id;
+           this.stoped=this.item.isDisabled;
            this.itemPhotoService.getsByItemId(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
             (photos:ApiObjectData)=>{
               this.itemsPhotos = photos.returnData as ItemPhoto[]
+              if(this.itemsPhotos.length!==0) this.photosLenght=1
             }
            )
         }
@@ -102,10 +135,10 @@ forAddPic:boolean=false;
   
   checkCode(e){
    if(e.value){
-    this.itemService.checkCode(e.value).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+    this.itemService.checkCode(e.value,this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       (data:ApiObjectData)=>{
-        this.itemCheck= data.returnData as Item
-        if(this.itemCheck.id !==undefined)
+        this.itemCheck= Boolean( data.returnData) ;
+        if(this.itemCheck ===true)
           this.alertService.error(this.translate.instant('thisCodeExist'))
       }
     )
@@ -153,15 +186,88 @@ forAddPic:boolean=false;
   }
 
   onParentChanged(e){
-    if(e.value){
-      if(e.value===this.item.id){
-        this.item.parentId=0;
+    if(e){
+      if(e.selectedItem.id===this.item.id){
         this.alertService.error(this.translate.instant('item.parentSameId'));
+       this.editForm.reset();
+      }
+      else{
+        if(e.selectedItem.isDisabled===true)
+        {
+          this.alertService.error(this.translate.instant('item.thisItemStoped'))
+          this.editForm.reset();
+        }
       }
     }
   }
 
+  stopItem(){
+    if(this.itemId!==0){
+      Swal.fire({
+        title: this.translate.instant('item.confirmStop'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a886',
+        cancelButtonColor: '#d33',
+        cancelButtonText: this.translate.instant('back'),
+        confirmButtonText: this.translate.instant('item.stopUseItem')
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.baseService.blockStart();
+          this.itemService.stopUseItem(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+          (apidata:ApiObjectData|any)=>{
+            
+              this.baseService.blockStop();
+              Swal.fire({
+                icon: 'success',
+                title: this.translate.instant('item.stopedDone'),
+                showConfirmButton: false,
+                timer: 1500
+              })
+              this.router.navigate(['/page/item']);
+          },error=>{
+            this.baseService.blockStop();
+            this.alertService.error(error);
+          }
+          )
+        }
+      })
+    }
+  }
 
+  unStopItem(){
+    if(this.itemId!==0){
+      Swal.fire({
+        title: this.translate.instant('item.confirmUnStop'),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#00a886',
+        cancelButtonColor: '#d33',
+        cancelButtonText: this.translate.instant('back'),
+        confirmButtonText: this.translate.instant('item.UnstopUseItem')
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.baseService.blockStart();
+          this.itemService.unStopUseItem(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+          (apidata:ApiObjectData|any)=>{
+            
+              this.baseService.blockStop();
+              Swal.fire({
+                icon: 'success',
+                title: this.translate.instant('item.unStopDone'),
+                showConfirmButton: false,
+                timer: 1500
+              })
+              this.router.navigate(['/page/item']);
+          },error=>{
+            this.baseService.blockStop();
+            this.alertService.error(error);
+          }
+          )
+        }
+      })
+    }
+  }
   //#region  for PHotos
   onFileChanged(event) {
     this.file = event.target.files[0];
@@ -172,6 +278,15 @@ forAddPic:boolean=false;
       .subscribe((data: any) => {
         this.itemPhoto.photoUrl = data.filePath;
         this.itemPhoto.itemId = this.itemId;
+        this.itemPhoto.isMain = true;
+        this.itemPhotoService.save(this.itemPhoto).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+          (data:ApiObjectData|any)=>{
+            this.itemsPhotos= new Array;
+            this.itemsPhotos.push(data.returnData as ItemPhoto)
+            this.itemPhoto = {}as ItemPhoto;
+            this.photosLenght=1;
+          }
+        )
         // this.itemPhoto.photoImage = data.file;
       });
   }
@@ -199,7 +314,7 @@ forAddPic:boolean=false;
           (data:ApiObjectData|any)=>{
             if(data.message.type==='Success'){
               this.baseService.blockStop();
-              this.itemPhotoService.getsByCategoryId(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+              this.itemPhotoService.getsByItemId(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
                 (data:ApiObjectData)=>{
                   this.itemsPhotos = data.returnData as ItemPhoto[];
                 },error=>{
@@ -275,7 +390,7 @@ forAddPic:boolean=false;
   setMainPhoto(id){
     if(id){
       this.baseService.blockStart();
-      this.itemPhotoService.setCatMain(id,this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+      this.itemPhotoService.setItemMain(id,this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
         (photoD:ApiObjectData|any)=>{
           this.baseService.blockStop();
           this.itemsPhotos= photoD.returnData as ItemPhoto[];
@@ -287,6 +402,7 @@ forAddPic:boolean=false;
       )
     }
   }
+
   onFocusedCatRowChanged(e) {
     if (e) {
       this.itemId = e;
@@ -297,7 +413,7 @@ forAddPic:boolean=false;
         .subscribe(
           (objectData: ApiObjectData) => {
             this.item = objectData.returnData as Item;
-            this.itemPhotoService.getsByCategoryId(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+            this.itemPhotoService.getsByItemId(this.itemId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
               (photo:ApiObjectData|any)=>{
                 this.baseService.blockStop();
                 this.itemsPhotos = photo.returnData as ItemPhoto[];

@@ -14,12 +14,15 @@
                     <button type="button" class="btn btn-success" accessKey="add" (click)="addItem()">
                       <i class=" fa fa-plus"></i> {{'add' | translate}}
                     </button>
-                    <button type="button" class="btn btn-info" accessKey="edit" (click)="editItem()">
+                    <button type="button" class="btn btn-info" accessKey="edit" [disabled]="this.itemId===0" (click)="editItem()">
                       <i class=" fa fa-edit"></i> {{'edit' | translate}}
                     </button>
-                    <button type="button" class="btn btn-danger" accessKey="delete">
-                      <i class=" fa fa-trash"></i> {{'delete' | translate}}
-                    </button>
+                    <button *ngIf="this.stoped===false" type="button" [disabled]="this.itemId===0" class="btn btn-danger" accessKey="stopUse" (click)="stopItem()">
+                      <i class="mdi mdi-stop-circle"></i> {{'item.stopUseItem' | translate}}
+                  </button>
+                  <button *ngIf="this.stoped===true" type="button" class="btn btn-primary" accessKey="unstopUse" (click)="unStopItem()">
+                    <i class="mdi mdi-motion-play"></i> {{'item.UnstopUseItem' | translate}}
+                </button>
                   </div>
                 </div>
               </div>
@@ -54,7 +57,8 @@
                         <dxi-column dataField="brandId" alignment="center" caption="{{'item.brand' | translate}}" >
                           <dxo-lookup [dataSource]="brands" alignment="center" [class]="this.baseService.isRTL? 'text right':'text left'" [displayExpr]="this.baseService.isRTL? 'nameAr':'nameEn'" valueExpr="id">
                           </dxo-lookup>
-                        </dxi-column>      
+                        </dxi-column>   
+                        <dxi-column [dataField]="this.baseService.isRTL?'isDisabledInfoAr':'isDisabledInfoEn'" alignment="center" caption="{{'item.isStop' | translate}}" ></dxi-column>   
                       <dxo-editing>
                         <dxo-texts confirmDeleteMessage="{{'confirmDeleteMessage' | translate}}"
                           confirmDeleteTitle="{{'confirmDeleteTitle' | translate}}">

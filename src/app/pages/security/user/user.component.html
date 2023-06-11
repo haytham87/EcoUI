@@ -1,19 +1,87 @@
 <div class="row">
-    <div class="col-lg-12">
-      <div class="d-xl-flex">
-        <div class="row">
+  <div class="col-lg-12">
+      <div class="row">
           <div class="col-lg-12">
-            <div class="card">
-              <div class="card-body">
-                <span>
-                  <i class="mdi mdi-account-group"></i>
-                  <h4 class="card-title mb-2">{{"Users" | translate}}</h4>
-                </span>
+              <div class="card">
+                  <div class="card-body">
+                      <span>
+                          <i class="mdi mdi-account-group"></i>
+                          <h4 class="card-title mb-2" *ngIf="pageType==='add'">{{"user.addUser" | translate}}</h4>
+                          <h4 class="card-title mb-2" *ngIf="pageType==='edit'">{{"user.editUser" | translate}}</h4>
+                      </span>
+                      <div class="col-lg-12">
+                          <div class="button-items">
+                              <div #headerActions>
+                                  <button type="button" class="btn btn-success" accessKey="save"
+                                   [disabled]="!(editForm.valid&&editForm.dirty)">
+                                      <i class=" fas fa-save"></i> {{'save' | translate}}
+                                  </button>
+                                  <button type="button" class="btn btn-info" accessKey="edit" [routerLink]="'/page/item'">
+                                      <i class=" fas fa-backward"></i> {{'back' | translate}}
+                                  </button>
+                                  <button *ngIf="this.stoped===false" type="button" class="btn btn-danger" accessKey="stopUse" >
+                                      <i class="mdi mdi-stop-circle"></i> {{'item.stopUseItem' | translate}}
+                                  </button>
+                                  <button *ngIf="this.stoped===true" type="button" class="btn btn-primary" accessKey="unstopUse" >
+                                      <i class="mdi mdi-motion-play"></i> {{'item.UnstopUseItem' | translate}}
+                                  </button>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-lg-12">
+                              <form class="form" #editForm="ngForm" id="editForm" class="needs-validation" novalidate>
+                                  <div class="card-body">
 
+                                      <div class="row">
+                                          <div class="col-md-6">
+                                              <label class="label mb-2">{{'item.Category'|translate}}</label>
+                                              <div class="form-value">
+                                                  <dx-select-box id="categoryId" name="categoryId"
+                                                      [dataSource]="userTypes" class="borderStyle"
+                                                      [searchEnabled]="true" [rtlEnabled]="this.baseService.isRTL"
+                                                      [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'" required
+                                                      valueExpr="id" [(ngModel)]="user.userTypeId" ngModel 
+                                                      #categoryId="ngModel" [searchEnabled]="true">
+                                                  </dx-select-box>
+                                              </div>
+                                          </div>
+                                          <div class="col-md-6">
+                                              <label class="label mb-2">{{'item.brand'|translate}}</label>
+                                              
+                                          </div>
+                                      </div>
+
+                                      <div class="row mt-3">
+                                          <div class="col-md-4">
+                                              <label class="label mb-2">{{'code'|translate}}</label>
+                                              <dx-text-box placeholder="{{'code' | translate}}" id="txtcode"
+                                                  name="code" ngModel required #txtcode="ngModel" 
+                                                  [(ngModel)]="user.code"></dx-text-box>
+                                          </div>
+                                          <div class="col-md-4">
+                                              <label class="label mb-2">{{'nameAr'|translate}}</label>
+                                              <dx-text-box placeholder="{{'nameAr' | translate}}" id="txtnameAr"
+                                                  name="nameAr" ngModel ArabicChar required #txtnameAr="ngModel"
+                                                  [(ngModel)]="user.nameAr"></dx-text-box>
+                                          </div>
+                                          <div class="col-md-4">
+                                              <label class="label mb-2">{{'nameEn'|translate}}</label>
+                                              <dx-text-box placeholder="{{'nameEn' | translate}}" id="txtnameEn"
+                                                  name="nameEn" ngModel EnglishChar required #txtnameEn="ngModel"
+                                                  [(ngModel)]="user.nickName"></dx-text-box>
+                                          </div>
+                                      </div>
+
+                                  
+                                     
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
               </div>
-            </div>
           </div>
-        </div>
       </div>
-    </div>
+  </div>
 </div>

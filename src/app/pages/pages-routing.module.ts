@@ -1,3 +1,4 @@
+import { UserComponent } from './security/user/user.component';
 import { CategoriesComponent } from './mainData/categories/categories.component';
 import { NgModule, Component } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -15,7 +16,7 @@ import { ItemsComponent } from './mainData/items/items.component';
 import { ItemComponent } from './mainData/item/item.component';
 import { BrandsComponent } from './mainData/brands/brands.component';
 import { UsersComponent } from './security/users/users.component';
-import { UsersResolver } from '../core/resolvers/sc/user.resolver';
+import { UserResolver, UsersResolver } from '../core/resolvers/sc/user.resolver';
 import { RolesResolver } from '../core/resolvers/sc/role.resolver';
 import { UserRolesResolver } from '../core/resolvers/sc/user-role.resolver';
 import { RolesComponent } from './security/roles/roles.component';
@@ -24,6 +25,7 @@ import { ScreensResolver } from '../core/resolvers/sc/screen.resolver';
 import { CategoriesResolver, CategoryResolver } from '../core/resolvers/st/category.resolver';
 import { ItemResolver, ItemsResolver } from '../core/resolvers/st/item.resolver';
 import { BrandsResolver } from '../core/resolvers/st/brand.resolver';
+import { UserTypesResolver } from '../core/resolvers/sc/userType.resolver';
 
 
 const routes: Routes = [
@@ -91,6 +93,17 @@ const routes: Routes = [
       itemsDataSource: UsersResolver,
       roles: RolesResolver,
       userRoles: UserRolesResolver
+    }
+  },
+  {
+    path:'user/:type/:id',
+    component:UserComponent,
+    data:{
+
+    },
+    resolve:{
+      user:UserResolver,
+      userTypes:UserTypesResolver
     }
   },
   {

@@ -302,6 +302,13 @@
     "addItem":"Add Item",
     "editItem":"Edit Item",
     "parentItem":"Parent Item",
-    "parentSameId":"Parent Same Item it`s can`t be"
+    "parentSameId":"Parent Same Item it`s can`t be",
+    "stopUseItem":"Stop Useing this item",
+    "confirmStop":"are you Sure you want Stop useing this item!",
+    "stopedDone":"Item Stop Useing Successfully",
+    "thisItemStoped":"this item Is Stoped Can`t be select",
+    "UnstopUseItem":"Return Item to Use",
+    "confirmUnStop":"are you Sure Return Use Item",
+    "unStopDone":"Return Use Item Done Successfully"
   }
 }

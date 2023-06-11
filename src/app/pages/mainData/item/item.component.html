@@ -19,8 +19,11 @@
                                     <button type="button" class="btn btn-info" accessKey="edit" [routerLink]="'/page/item'">
                                         <i class=" fas fa-backward"></i> {{'back' | translate}}
                                     </button>
-                                    <button type="button" class="btn btn-danger" accessKey="delete">
-                                        <i class=" fa fa-trash"></i> {{'delete' | translate}}
+                                    <button *ngIf="this.stoped===false" type="button" class="btn btn-danger" accessKey="stopUse" (click)="stopItem()">
+                                        <i class="mdi mdi-stop-circle"></i> {{'item.stopUseItem' | translate}}
+                                    </button>
+                                    <button *ngIf="this.stoped===true" type="button" class="btn btn-primary" accessKey="unstopUse" (click)="unStopItem()">
+                                        <i class="mdi mdi-motion-play"></i> {{'item.UnstopUseItem' | translate}}
                                     </button>
                                 </div>
                             </div>
@@ -59,7 +62,7 @@
                                             <div class="col-md-4">
                                                 <label class="label mb-2">{{'code'|translate}}</label>
                                                 <dx-text-box placeholder="{{'code' | translate}}" id="txtcode"
-                                                    name="code" ngModel required #txtinvoiceNo="ngModel" (onValueChanged)="checkCode($event)"
+                                                    name="code" ngModel required #txtcode="ngModel" (onValueChanged)="checkCode($event)"
                                                     [(ngModel)]="item.code"></dx-text-box>
                                             </div>
                                             <div class="col-md-4">
@@ -84,10 +87,10 @@
                                             </div>
                                             <div class="col-md-8" *ngIf="sample===true">
                                                 <label class="label mb-2">{{'item.parentItem'|translate}}</label>
-                                                <dx-select-box id="parentId" name="patentId" [dataSource]="items"
+                                                <dx-select-box #selectParent id="parentId" name="patentId" [dataSource]="items"
                                                     class="borderStyle" [searchEnabled]="true"
                                                     [rtlEnabled]="this.baseService.isRTL" required 
-                                                    (onValueChanged)="onParentChanged($event)"
+                                                    (onSelectionChanged)="onParentChanged($event)"
                                                     [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
                                                     valueExpr="id" [(ngModel)]="item.parentId" ngModel
                                                     #categoryId="ngModel" [searchEnabled]="true">
@@ -95,7 +98,7 @@
                                             </div>
                                         </div>
                                         
-                                        <div class="row mt-3" *ngIf="itemsPhotos===[]&&this.itemId!==0">
+                                        <div class="row mt-3" *ngIf="photosLenght===0">
                                             <label>{{'addImage'|translate}}</label>
                                             <label for="categoryImg_input"
                                             title="{{'Category.uploadImage' | translate}}"
@@ -115,7 +118,7 @@
                         <div class="row mt-5" *ngIf="itemAdded===true">
                             <div class="col-lg-12">
                                 <div class="row" >
-                                    <div class="text-center" *ngIf="itemId!==0">
+                                    <div class="text-center" *ngIf="itemId!==0&&photosLenght!==0">
                                       <label accesskey="add" for="updateImg" class="btn btn-primary btn-lg  fas fa-images" (click)="addImage()" ngbTooltip="{{'addImage'|translate}}"></label>
                                     </div>
                                     <div class="col-lg-2 col-md-12 mb-3" *ngFor="let photo of itemsPhotos" >

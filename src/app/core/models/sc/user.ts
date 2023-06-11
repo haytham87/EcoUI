@@ -2,11 +2,11 @@ export class User {
   id: number;
   userId: number;
   countryId: number;
-  languageId: number;
-  employeeId: number;
+
   userTypeId: number;
   code: string;
   nameAr: string;
+  nickName:string;
   username: string;
   password: string;
   passwordHash: string;
