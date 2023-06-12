@@ -92,7 +92,8 @@ const routes: Routes = [
     resolve: {
       itemsDataSource: UsersResolver,
       roles: RolesResolver,
-      userRoles: UserRolesResolver
+      userRoles: UserRolesResolver,
+      userTypes:UserTypesResolver
     }
   },
   {

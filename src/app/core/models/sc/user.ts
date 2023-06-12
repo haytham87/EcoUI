@@ -6,9 +6,11 @@ export class User {
   userTypeId: number;
   code: string;
   nameAr: string;
+  nameEn:string;
   nickName:string;
   username: string;
   password: string;
+  confirmPass:string;
   passwordHash: string;
   passwordSalt: string;
   photoBase64: string;

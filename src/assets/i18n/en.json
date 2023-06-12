@@ -291,7 +291,10 @@
     "organization": "Organization",
     "personType": "Groups",
     "rank": "Rank",
-    "unit": "Unit"
+    "unit": "Unit",
+    "userData":"User Data",
+    "passNotMatch":"Password Not Match",
+    "confirmPass":"Confirm Password"
   },
   "item":{
     "name":"Name",

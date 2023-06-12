@@ -273,7 +273,7 @@ forAddPic:boolean=false;
     this.file = event.target.files[0];
     document.getElementById('categoryImg_input').textContent = this.file.name;
     this.uploadService
-      .CategoryImage(this.file)
+      .ItemImage(this.file)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data: any) => {
         this.itemPhoto.photoUrl = data.filePath;
@@ -304,7 +304,7 @@ forAddPic:boolean=false;
     document.getElementById('updateImg').textContent = this.file.name;
     this.baseService.blockStart();
     this.uploadService
-      .CategoryImage(this.file)
+      .ItemImage(this.file)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((data: any) => {
         this.itemPhoto.photoUrl = data.filePath;

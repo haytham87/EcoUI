@@ -16,10 +16,10 @@ export class UploadService {
       return this.base.save(this.controller + '/CategoryImage', formData)
   }
 
-  DriverLiensesImage(file):Observable<any> {
+    ItemImage(file):Observable<any> {
       const formData = new FormData(); 
       formData.append("file", file, file.name);
-      return this.base.save(this.controller + '/DriverLienses', formData)
+      return this.base.save(this.controller + '/ItemImage', formData)
   }
 
 

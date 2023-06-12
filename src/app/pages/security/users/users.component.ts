@@ -16,6 +16,9 @@ import { ConfigService } from 'src/app/core/services/base/config.service';
 import { User } from 'src/app/core/models/sc/user';
 import ArrayStore from 'devextreme/data/array_store';
 import { TranslateService } from '@ngx-translate/core';
+import { UserType } from 'src/app/core/models/sc/userType';
+import { NgModel } from '@angular/forms';
+
 
 @Component({
   selector: 'users',
@@ -28,10 +31,10 @@ export class UsersComponent extends BaseComponent implements OnInit {
   @ViewChild('listUser', { static: false }) list: DxListComponent;
   @ViewChild("headerActions") headerActions: ElementRef;
   @ViewChild('unitTreeView', { static: false }) unitTreeView: DxTreeViewComponent;
-
+  @ViewChild('addForm',{static:true}) addForm:NgModel;
   gridInstance: DataGrid;
   itemsDataSource: User[];
-  user: User;
+  user= {} as User;
   dataModel: any = { userId: '', userRoles: [] };
   selectedItem: any;
   itemId = 0;
@@ -39,6 +42,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
   flag: boolean;
   showPasswordField = false;
   popupVisible = false;
+  userTypes: UserType[];
   height = 0;
   rowIndex: -1;
   selectedItemKeys: any[];
@@ -54,7 +58,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
   delete: boolean = false;
   activeArr: any[] = [];
   usertypes: any = [];
-
+  added:boolean=false;
   disabledSelection=[]=[
     {id:'true',nameAr:'غير نشط',nameEn:'Is Disabled'},
     {id:'false',nameAr:'نشط',nameEn:'Not Disabled'},
@@ -92,11 +96,13 @@ export class UsersComponent extends BaseComponent implements OnInit {
 
   }
 
-  loadData(): void {
+  loadData() {
     this.userScreens = JSON.parse(localStorage.getItem("userScreens"));
     this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       data => {
         // this.units = data.units.returnData;
+        this.usertypes = data.userTypes.returnData;
+        this.roles = data.roles.returnData;
       },
       error => {
         this.alertService.error(error);
@@ -160,13 +166,14 @@ export class UsersComponent extends BaseComponent implements OnInit {
   getRoles(): void {
     this.route.data.subscribe(
       data => {
-        this.roles = data.roles.returnData;
+        
       },
       error => {
         this.alertService.error(error);
       }
     );
   }
+
 
 
 
@@ -324,6 +331,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
   onSelectionChanged(e) {
     if (e.currentSelectedRowKeys.length > 0) {
       this.itemId = e.currentSelectedRowKeys[0];
+      this.user = e.selectedRowsData[0];
       this.selectedItems = e.selectedRowsData[0].roleIds;
       this.selectedRowIndex = this.gridInstance.getRowIndexByKey(
         this.itemId
@@ -366,31 +374,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
     }
   }
 
-  // onClickClose(): void {
-  //   window.close();
-  // }
-
-  // saveGridInstance(e) {
-  //   this.dataGridInstance = e.component;
-  // }
-
-  // addRow() {
-  //   this.showPasswordField = true;
-  //   this.dataGridInstance.addRow();
-  // }
-
-  // editRow() {
-  //   this.showPasswordField = false;
-  //   this.dataGridInstance.editRow(
-  //     this.dataGridInstance.getRowIndexByKey(this.itemId)
-  //   );
-  // }
-
-  // deleteRow() {
-  //   this.dataGridInstance.deleteRow(
-  //     this.dataGridInstance.getRowIndexByKey(this.itemId)
-  //   );
-  // }
+  
 
   openPopup() {
     this.roleDataSourceItems = new DataSource({
@@ -409,6 +393,7 @@ export class UsersComponent extends BaseComponent implements OnInit {
   }
 
   saveSelectedItems() {
+    debugger
     this.baseService.blockStart();
     // Handle asynchronous work by using promise
     this.dataModel.userId = this.itemId;
@@ -477,9 +462,15 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.searchVm.unitIdList = e.component.getSelectedNodeKeys();
   }
 
-  openSearchPop(){
+  openUserDataPop(){
     this.popSearch=true;
-    this.searchVm ={} as User;
+    this.user ={} as User;
+    this.added=true;
+  }
+
+  editUserData(){
+    this.popSearch=true;
+    this.added=false;
   }
 
   searchInUser() {
@@ -510,5 +501,53 @@ export class UsersComponent extends BaseComponent implements OnInit {
     this.popSearch=false;
   }
 
+  saveUser(){
+    this.baseService.blockStart();
+    this.user.userRoles=[];
+    this.user.roleIds=[];
+    this.user.unitIdList=[];
+    this.userService.save(this.user).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
+      (data:ApiObjectData|any)=>{
+        this.baseService.blockStop();
+        if(data.message.type==='Success'){
+          this.user= data.returnData as User;
+          this.ngOnInit();
+          this.alertService.success(this.translate.instant('SavedSuccess'));
+          this.popSearch=false;
+
+        }else{
+          this.alertService.error(data.message.log)
+        }
+       
+      },error=>{
+        this.baseService.blockStop();
+        this.alertService.error(error);
+      }
+    )
+  }
+
+  passChanged(e){
+    if(this.user.confirmPass!==undefined){
+      if(this.user.confirmPass!==e.component._changedValue){
+        this.user.password='';
+        this.user.confirmPass='';
+       this.alertService.error(this.translate.instant('security.passNotMatch'))
+       this.addForm.control['password'].setErrors({ 'incorrect': true});
+      }
+    }
+  }
+
+  checkPass(e){
+    console.log(e.component._changedValue)
+    if(this.user.password!==undefined||this.user.password!==''){
+      if(e.component._changedValue!==this.user.password){
+        this.user.password='';
+        this.user.confirmPass='';
+       this.alertService.error(this.translate.instant('security.passNotMatch'))
+       this.addForm.control['password'].setErrors({ 'incorrect': true});
+      }
+    }
+    
+  }
 }
 
