@@ -375,8 +375,8 @@ export class RolesComponent extends BaseComponent implements OnInit {
     this.selectedRowIndex = this.dataGridInstance.getRowIndexByKey(id);
     this.selectedRowKeys = this.itemsDataSource[this.selectedRowIndex].roleMenus;
     this.treeList.instance.selectRows(this.selectedRowKeys, false);
-    this.popupVisible = true;
-    this.itemId = id;
+     this.popupVisible = true;
+     this.itemId = id;
 
    
   }
@@ -414,7 +414,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
   }
 
   saveSelectedItems() {
-    debugger
+    
     this.dataModel.roleId = this.itemId;
     this.dataModel.roleMenus = this.treeList.instance.getSelectedRowKeys('all');
 
@@ -450,7 +450,7 @@ export class RolesComponent extends BaseComponent implements OnInit {
   }
 
   handlesxreenSelect(e) {
-    debugger
+    
     this.selectedMeuns  =this.treeList.instance.getSelectedRowKeys('leavesOnly');
     this.formService.getByMenu(this.selectedMeuns).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
       (data: ApiObjectData|any)=> {

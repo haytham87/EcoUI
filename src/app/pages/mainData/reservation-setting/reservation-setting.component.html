@@ -1,0 +1,170 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <span>
+                  <i class="mdi mdi-account-group"></i>
+                  <h4 class="card-title mb-3">{{"ReservSetting" | translate}}</h4>
+                </span>
+                <div class="col-lg-12">
+                  <div class="button-items">
+                    <div #headerActions>
+                      <button #myB type="button" class="btn btn-success"  accesskey="add">
+                        <i class=" fa fa-plus"></i> {{'add' | translate}}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <form class="form">
+                      <dx-data-grid #gridInstance id="gridData" [dataSource]="itemsDataSource" keyExpr="id"
+                        [showBorders]="true" [showRowLines]="true" [rtlEnabled]="this.baseService.isRTL"
+                        [allowColumnReordering]="true" [allowColumnResizing]="true" [columnAutoWidth]="true"
+                        [columnHidingEnabled]="true" [height]="height" (onInitialized)="grid_onInitialized($event)"
+                        (onSelectionChanged)="onSelectionChanged($event)" (onCellPrepared)="onCellPrepared($event)"
+                         (onRowUpdating)="onRowUpdating($event)">
+                        <dxo-search-panel [visible]="true"></dxo-search-panel>
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-paging [pageSize]="10"></dxo-paging>
+                        <dxo-pager [allowedPageSizes]="[5,10, 20, 50, 100]" [showInfo]="true"
+                          [showNavigationButtons]="true" [showPageSizeSelector]="true" [visible]="true">
+                        </dxo-pager>
+                        <dxo-sorting mode="multiple"></dxo-sorting>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-header-filter [visible]="true"></dxo-header-filter>
+  
+                        <dxi-column [dataField]="this.baseService.isRTL? 'nameAr':'nameEn'" alignment="center"
+                          caption="{{'name'|translate}}"></dxi-column>
+                        <dxi-column dataField="price" caption="{{'price' | translate}}" alignment="center">
+                        </dxi-column>
+                        <dxi-column dataField="description" caption="{{'description' | translate}}" alignment="center">
+                        </dxi-column>
+                        <dxi-column [allowFiltering]="false" [allowSorting]="false" cellTemplate="actions"
+                        alignment="center" caption="{{'actions' | translate}}">
+                      </dxi-column>
+                        <div *dxTemplate="let data of 'actions'"
+                          style="text-align: center;font-size: 20px;color: #00a886;">
+                          <i class="far fa-edit" style="cursor: pointer; margin-left: 15px" (click)="this.popupReserv=true"
+                            accessKey="edit" title="{{'edit' | translate}}"></i>
+  
+                          <i class="fa fa-braille ml-2 mr-2" style="cursor: pointer;" accessKey="roleAccess"
+                            (click)="openPopup()" title="{{'security.roles' | translate}}"></i>
+                        </div>
+                        <div *dxTemplate="let cell of 'editCellTemplate'">
+                          <dx-tag-box [dataSource]="this.users" [(value)]="cell.data.roleIds" displayExpr="nameAr"
+                            valueExpr="id" [readOnly]=true>
+                          </dx-tag-box>
+                        </div>
+                        <dxo-editing mode="popup" [useIcons]="true" [allowAdding]="false" [allowUpdating]="false"
+                          [allowDeleting]="false" >
+                          <dxo-texts saveRowChanges="{{'save' | translate}}" cancelRowChanges="{{'cancel' | translate}}"
+                            confirmDeleteMessage="{{'confirmDeleteMessage' | translate}}"
+                            confirmDeleteTitle="{{'confirmDeleteTitle' | translate}}">
+                          </dxo-texts>
+                          <dxo-popup title="{{'security.info' | translate}}" [showTitle]="true" [height]="400"
+                            [position]="{ my: 'center', at: 'center' }">
+                          </dxo-popup>
+                        </dxo-editing>
+                      </dx-data-grid>
+                      <dx-popup class="popup" [rtlEnabled]="this.baseService.isRTL" [showTitle]="true"
+                        title="{{'security.users' | translate}}" [dragEnabled]="false" [(visible)]="popupVisible"
+                        [maxWidth]="'50.5%'" [maxHeight]="'auto'">
+                        <dx-scroll-view>
+
+                       
+                        <div class="col-lg-12" style="font-family: 'JF-Flat' !important">
+                          <!-- <div class="card-title" style="padding-top: 0;">
+                            <span>
+                              <strong>{{"Users" | translate}}</strong>
+                            </span>
+                          </div> -->
+                          <div class="card-body">
+                            <dx-list pageLoadMode="scrollBottom" #listUser [dataSource]="typeDataSourceItems"
+                              [searchEnabled]="true" [searchExpr]="this.baseService.isRTL?'nameAr':'nameEn'" searchMode="contains" [height]="height"
+                              [selectionMode]="'all'" [selectAllMode]="'allPages'" [showSelectionControls]="true"
+                              [selectedItemKeys]="selectedItems" itemTemplate="data" [useNativeScrolling]="true"
+                              [scrollByThumb]="true">
+  
+                              <div *dxTemplate="let item of 'data'">
+                                <div *ngIf="this.baseService.isRTL">{{item.nameAr}}</div>
+                                <div *ngIf="!this.baseService.isRTL">{{item.nameEn}}</div>
+                              </div>
+                            </dx-list>
+                          </div>
+                          <div class="card-footer">
+                            <div class="button-items">
+                              <button type="submit" class="btn btn-success" (click)="saveSelectedItems()">
+                                <i class="fa fa-save"></i> {{'save' | translate}}
+                              </button>
+                              <button type="button" class="btn btn-danger" (click)="hidePopup()">
+                                <i class=" bx bx-arrow-back"></i> {{'back' | translate}}
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                    </dx-scroll-view>
+                      </dx-popup>
+                      
+                      <dx-popup [rtlEnabled]="this.baseService.isRTL" [visible]="popupReserv" [maxWidth]="'65.5%'"
+                    [maxHeight]="'60%'" [showTitle]="true"  title="{{'Category.Category' | translate}}" [dragEnabled]="false" >
+                    <dx-scroll-view>
+                        <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
+                          <form class="form" #editForm="ngForm" id="editForm" class="needs-validation" novalidate>
+                      
+                            <div class="row mt-3">
+                              
+                              <div class="col-md-4">
+                                <label class="label mb-3">{{'nameAr' | translate}}</label>
+                                <div class="form-value">
+                                  <dx-text-box placeholder="{{'nameAr' | translate}}" id="txtnameAr" name="nameAr" ngModel ArabicChar
+                                    required #txtnameAr="ngModel" [(ngModel)]="reservType.nameAr"></dx-text-box>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <label class="label mb-3">{{'nameEn' | translate}}</label>
+                                <div class="form-value">
+                                  <dx-text-box placeholder="{{'nameEn' | translate}}" id="txtnameEn" name="nameEn" ngModel EnglishChar
+                                    required #txtnameEn="ngModel" [(ngModel)]="reservType.nameEn"></dx-text-box>
+                                </div>
+                              </div>
+                              <div class="col-md-4">
+                                <label class="label mb-3">{{'price' | translate}}</label>
+                                <div class="form-value">
+                                  <dx-text-box placeholder="{{'price' | translate}}" id="txtprice" name="price" ngModel 
+                                    required #txtnameEn="ngModel" [(ngModel)]="reservType.price"></dx-text-box>
+                                </div>
+                              </div>
+                            </div>
+                            
+                            <div class="row">
+                              <div class="col-md-12 mt-3">
+                                <label class="label mb-3">{{'description'|translate}}</label>
+                                <dx-text-area #discription="ngModel"
+                                [height]="60" [(ngModel)]="reservType.description" name="description" [autoResizeEnabled]="true">
+                                 </dx-text-area>
+                              </div>
+                            </div>
+                          </form>
+                          <div class="form-actions mt-5">
+                            <div class="button-items">
+                              <button type="submit" form="editForm" class="btn btn-success" [disabled]="!(editForm.valid && editForm.dirty)" (click)="saveReserv()"><i class="fa fa-save mr-3 ml-3"></i>{{'save'|translate}}</button>
+                              <button  class="btn btn-danger"(click)="this.popupReserv=false"><i class="ft-x"></i>{{'back'
+                                | translate}}</button>
+                            </div>
+        
+                          </div>
+                        </div>
+                      </dx-scroll-view>
+                    </dx-popup>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+</div>

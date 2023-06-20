@@ -203,7 +203,8 @@
 
   },
   "toastrMsg":{
-    "youAreLoggedInSuccessfully":"Welcome -- you are logged in Successfully"
+    "youAreLoggedInSuccessfully":"Welcome -- you are logged in Successfully",
+    "savedSuccessfully":"Saved Successfully"
 },
 "welcomeBack":"Welcome Back",
 "lookForEmail":"Looking for user By Email",
@@ -248,6 +249,14 @@
     "deletedDone":"Deleted Done",
     "selectElementFirst":"Select Element First",
     "addImage":"Add Image",
+    "price":"Price",
+    "ReservSetting":"Set Reservation Settings",
+    "Companies":"Companies",
+    "Country":"Country",
+    "city":"city",
+    "phone":"Phone",
+    "mobile":"Mobile",
+    "address":"Address",
     "Category":{
       "name":"Category Name",
       "photo":"Category Image",
@@ -294,7 +303,8 @@
     "unit": "Unit",
     "userData":"User Data",
     "passNotMatch":"Password Not Match",
-    "confirmPass":"Confirm Password"
+    "confirmPass":"Confirm Password",
+    "saveRoleModels":"Save Menus and Actions"
   },
   "item":{
     "name":"Name",

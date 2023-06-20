@@ -1,0 +1,162 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-body">
+                <span>
+                  <i class="mdi mdi-account-group"></i>
+                  <h4 class="card-title mb-2">{{"Items" | translate}}</h4>
+                </span>
+                <div class="col-lg-12">
+                  <div class="button-items" >
+                    <div #headerActions>
+                      <button type="button" class="btn btn-success" accessKey="add" (click)="addItem()">
+                        <i class=" fa fa-plus"></i> {{'add' | translate}}
+                      </button>
+                      <button type="button" class="btn btn-info" accessKey="edit" (click)="editItem()">
+                        <i class=" fa fa-edit"></i> {{'edit' | translate}}
+                      </button>
+                      <button type="button" class="btn btn-danger" accessKey="delete"  (click)="deleteItem()">
+                        <i class=" fa fa-trash"></i> {{'delete' | translate}}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-lg-12" >
+                    <form class="form">
+                      <div class="card-body">
+                        <dx-data-grid #gridItems id="gridItems" [dataSource]="itemPrices" keyExpr="id" [showBorders]="true"
+                        [showRowLines]="true" [rtlEnabled]="this.baseService.isRTL" [allowColumnReordering]="true"
+                        [allowColumnResizing]="true" [columnAutoWidth]="true" [columnHidingEnabled]="true"
+                         [height]="height"
+                        (onSelectionChanged)="onSelectionChanged($event)" (onInitialized)="onInitialized($event)">
+                        <dxo-search-panel [visible]="true" ></dxo-search-panel>
+                        <dxo-selection mode="single"></dxo-selection>
+                        <dxo-paging [pageSize]="10"></dxo-paging>
+                        <dxo-pager [allowedPageSizes]="[10, 20, 50, 100]" [showInfo]="true" [showNavigationButtons]="true"
+                          [showPageSizeSelector]="true" [visible]="true">
+                        </dxo-pager>
+                        <dxo-group-panel [visible]="true" ></dxo-group-panel>
+                        <dxo-sorting mode="multiple"></dxo-sorting>
+                        <dxo-filter-row [visible]="true"></dxo-filter-row>
+                        <dxo-header-filter [visible]="true"></dxo-header-filter>
+                        <dxo-export [enabled]="true" fileName="Data" [allowExportSelectedData]="false"></dxo-export>
+        
+                        <dxi-column [dataField]="this.baseService.isRTL?'itemNameAr':'itemNameEn'" alignment="center" caption="{{'item.name' | translate}}"></dxi-column>
+        
+                          <dxi-column [dataField]="this.baseService.isRTL?'companyNameAr':'companyNameEn'"  caption="{{'company' | translate}}"  alignment="center">
+                          </dxi-column>
+                          <dxi-column dataField="price" alignment="center" caption="{{'item.price' | translate}}" >
+                          </dxi-column>   
+                          <dxi-column dataField="salePrice" alignment="center" caption="{{'item.price' | translate}}" >
+                          </dxi-column>   
+                        <dxo-editing>
+                          <dxo-texts confirmDeleteMessage="{{'confirmDeleteMessage' | translate}}"
+                            confirmDeleteTitle="{{'confirmDeleteTitle' | translate}}">
+                          </dxo-texts>
+                        </dxo-editing>
+                      </dx-data-grid>
+                      <dx-popup [rtlEnabled]="this.baseService.isRTL" [visible]="popItemPrice" [maxWidth]="'85.5%'" [showCloseButton]="false"
+                      [maxHeight]="'80%'" [showTitle]="true"  title="{{'Category.Category' | translate}}" [dragEnabled]="false" >
+                      <dx-scroll-view>
+                          <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
+                            <form class="form" #editForm="ngForm" id="editForm" class="needs-validation" novalidate>
+                              <div class="row">
+                                  <div class="col-md-6">
+                                      <label class="label mb-3">{{'compnay' | translate}}</label>
+                                      <div class="form-value">
+                                          <dx-select-box id="compnayId" name="compnayId" [dataSource]="companies"
+                                          class="borderStyle" [searchEnabled]="true"
+                                          [rtlEnabled]="this.baseService.isRTL" 
+                                          [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
+                                          valueExpr="id" [(ngModel)]="itemPrice.companyId" ngModel 
+                                          #compnayId="ngModel" [searchEnabled]="true" >
+                                      </dx-select-box>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <label class="label mb-3">{{'item' | translate}}</label>
+                                      <div class="form-value">
+                                          <dx-select-box id="itemId" name="itemId" [dataSource]="items"
+                                          class="borderStyle" [searchEnabled]="true"
+                                          [rtlEnabled]="this.baseService.isRTL"
+                                          [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
+                                          valueExpr="id" [(ngModel)]="itemPrice.itemId" ngModel 
+                                          #itemId="ngModel" [searchEnabled]="true" >
+                                      </dx-select-box>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="row mt-3">
+                                
+                                <div class="col-md-6">
+                                  <label class="label mb-3">{{'price' | translate}}</label>
+                                  <div class="form-value">
+                                    <dx-text-box placeholder="{{'price' | translate}}" id="txtprice" name="price" ngModel 
+                                      required #txtprice="ngModel" [(ngModel)]="itemPrice.price"></dx-text-box>
+                                  </div>
+                                </div>
+                                <div class="col-md-6">
+                                  <label class="label mb-3">{{'companyValue' | translate}}</label>
+                                  <div class="form-value">
+                                    <dx-text-box placeholder="{{'companyValue' | translate}}" id="txtcompanyValue" name="companyValue" ngModel EnglishChar
+                                      required #txtcompanyValue="ngModel" [(ngModel)]="itemPrice.companyValue"></dx-text-box>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row mt-3">
+                                
+                                  <div class="col-md-4">
+                                    <label class="label mb-3">{{'item.companyPercent' | translate}}</label>
+                                    <div class="form-value">
+                                      <dx-text-box placeholder="{{'item.companyPercent' | translate}}" id="txtcompanyPercent" name="companyPercent" ngModel 
+                                         #txtcompanyPercent="ngModel" [(ngModel)]="itemPrice.companyPercent"></dx-text-box>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                    <label class="label mb-3">{{'appPercent' | translate}}</label>
+                                    <div class="form-value">
+                                      <dx-text-box placeholder="{{'appPercent' | translate}}" id="txtappPercent" name="appPercent" ngModel 
+                                         #txtappPercent="ngModel" [(ngModel)]="itemPrice.appPercent"></dx-text-box>
+                                    </div>
+                                  </div>
+                                  <div class="col-md-4">
+                                      <label class="label mb-3">{{'appValue' | translate}}</label>
+                                      <div class="form-value">
+                                        <dx-text-box placeholder="{{'appValue' | translate}}" id="txtappValue" name="appValue" ngModel 
+                                           #txtappValue="ngModel" [(ngModel)]="itemPrice.appValue"></dx-text-box>
+                                      </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col-md-12 mt-3">
+                                    <label class="label mb-3">{{'profit'|translate}}</label>
+                                     <dx-text-box placeholder="{{'profit' | translate}}" id="txtprofit" name="profit" ngModel 
+                                    #txtprofit="ngModel" [(ngModel)]="itemPrice.profit"></dx-text-box>
+                                  </div>
+                                </div>
+                            </form>
+                            <div class="form-actions mt-5">
+                              <div class="button-items">
+                                <button type="submit" form="editForm" class="btn btn-success" [disabled]="!(editForm.valid && editForm.dirty)" (click)="saveItemPrice()"><i class="fa fa-save mr-3 ml-3"></i>{{'save'|translate}}</button>
+                                <button  class="btn btn-danger"(click)="this.popItemPrice=false"><i class="ft-x"></i>{{'back'
+                                  | translate}}</button>
+                              </div>
+          
+                            </div>
+                          </div>
+                        </dx-scroll-view>
+                      </dx-popup>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  

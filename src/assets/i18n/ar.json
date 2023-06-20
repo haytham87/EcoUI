@@ -110,7 +110,8 @@
         }
     },
     "toastrMsg":{
-        "youAreLoggedInSuccessfully":"مرحبا بك -- تم تسجيل دخولك بنجاح"
+        "youAreLoggedInSuccessfully":"مرحبا بك -- تم تسجيل دخولك بنجاح",
+        "savedSuccessfully":"تم الحفظ بنجاح"
     },
     "welcomeBack":" مرحباً بك مجدداً",
     "lookForEmail":"البحث عن ايميل المستخدم",
@@ -156,6 +157,14 @@
     "deletedDone":"تم الحذف بنجاح",
     "selectElementFirst":"قم باختيار عنصر اولأ",
     "addImage":"إضافة صورة",
+    "price":"السعر",
+    "ReservSetting":"ظبط بيانات الحجز",
+    "Companies":"الشركات",
+    "Country":"الدولة",
+    "city":"المدينة",
+    "phone":"رقم الهاتف",
+    "mobile":"رقم الموبايل",
+    "address":"العنوان",
     "Category":{
         "name":"إسم الفئة",
         "photo":"",
@@ -214,7 +223,8 @@
         "allowPrint": "موافقة الطباعه",
         "userData":"بيانات المستخدم",
         "passNotMatch":"كلمة المرور غير متطابقة",
-        "confirmPass":"مطابقة كلمة المرور"
+        "confirmPass":"مطابقة كلمة المرور",
+        "saveRoleModels":"حفظ القوائم والاجراءات"
       } ,
       "item":{
         "name":"الإسم",

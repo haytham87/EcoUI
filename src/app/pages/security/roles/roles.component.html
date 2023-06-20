@@ -113,14 +113,14 @@
                               </dx-tree-list>
                               <div><br></div>
                               <div class="form-actions">
-                                <button type="submit" class="mat-focus-indicator btn save_btn  mat-button-base"
+                                <button type="submit" class="btn btn-outline-success"
                                   (click)="saveSelectedItems()" style="margin: 0 5px;">
-                                  <i class="fa fa-save"></i> {{'saveRoleModels' | translate}}
+                                  <i class="fa fa-save"></i> {{'security.saveRoleModels' | translate}}
                                 </button>
                                 <!-- <button  class="mat-focus-indicator btn close_btn  mat-button-base"
-                            (click)="hidePopup()">
-                            <i class="ft-x"></i> {{'cancel' | translate}}
-                          </button> -->
+                                                            (click)="hidePopup()">
+                                                            <i class="ft-x"></i> {{'cancel' | translate}}
+                                                          </button> -->
                               </div>
                             </div>
                           </div>
@@ -165,7 +165,7 @@
                   <div class="form-actions mt-5">
                     <div class="button-items">
                       <button type="submit"  class="btn btn-success"  [disabled]="!(roleForm.valid&& roleForm.dirty)" 
-                        form="searchForm" (click)="saveRole()"><i class="fas fa-save"></i>
+                         (click)="saveRole()"><i class="fas fa-save"></i>
                         {{'save' | translate}}</button>
                       <button  class="btn btn-danger" (click)="hideRolePopup()"><i class="ft-x"></i>{{'back'
                         | translate}}</button>

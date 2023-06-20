@@ -5,10 +5,7 @@ import MetisMenu from 'metismenujs';
 import { Router, NavigationEnd } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 
-import { MENU } from './menu';
-import { MenuItem } from './menu.model';
-import { NewMenuItem } from './newmenu.model';
-import { NewMenu } from './menu';
+
 
 import { SIDEBAR_COLOR } from '../layouts.model';
 import { takeUntil } from 'rxjs/operators';
@@ -29,9 +26,7 @@ import { BehaviorSubject } from 'rxjs';
 export class SidebarComponent implements OnInit {
   @ViewChild('sideMenu') sideMenu!: ElementRef;
   public menu: any[];
-  menuItems: MenuItem[] = [];
   newmenu: any;
-  newMenuItems: NewMenuItem[] = [];
   // apiMenu: any[];
 
 

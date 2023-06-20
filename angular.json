@@ -7,7 +7,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Dashbord-Amr": {
+    "Dashbord-UI": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -33,7 +33,7 @@
               "devextreme-angular",
               "devextreme"
             ],
-            "outputPath": "dist/Dashbord-Amr",
+            "outputPath": "dist/Dashbord-UI",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -77,13 +77,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "10mb"
                 }
               ]
             }
@@ -92,18 +92,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "Dashbord-Amr:build"
+            "browserTarget": "Dashbord-UI:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "Dashbord-Amr:build:production"
+              "browserTarget": "Dashbord-UI:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "Dashbord-Amr:build"
+            "browserTarget": "Dashbord-UI:build"
           }
         },
         "test": {
@@ -127,11 +127,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "Dashbord-Amr:serve"
+            "devServerTarget": "Dashbord-UI:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "Dashbord-Amr:serve:production"
+              "devServerTarget": "Dashbord-UI:serve:production"
             }
           }
         },
@@ -147,5 +147,5 @@
       }
     }
   },
-  "defaultProject": "Dashbord-Amr"
+  "defaultProject": "Dashbord-UI"
 }

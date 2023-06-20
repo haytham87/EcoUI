@@ -63,6 +63,10 @@ import { BrandsComponent } from './mainData/brands/brands.component';
 import { UsersComponent } from './security/users/users.component';
 import { RolesComponent } from './security/roles/roles.component';
 import { UserComponent } from './security/user/user.component';
+import { ReservationSettingComponent } from './mainData/reservation-setting/reservation-setting.component';
+import { CompanyComponent } from './mainData/company/company.component';
+import { ItemPriceComponent } from './mainData/item-price/item-price.component';
+import { OffersComponent } from './mainData/offers/offers.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +89,11 @@ import { UserComponent } from './security/user/user.component';
     BrandsComponent,
     UsersComponent,
     RolesComponent,
-    UserComponent
+    UserComponent,
+    ReservationSettingComponent,
+    CompanyComponent,
+    ItemPriceComponent,
+    OffersComponent
   ],
   imports: [
     CommonModule,

@@ -48,7 +48,7 @@
                       <dxo-export [enabled]="true" fileName="Data" [allowExportSelectedData]="false"></dxo-export>
       
                       <dxi-column dataField="code" caption="{{'item.code' |translate}}"></dxi-column>
-                      <dxi-column [dataField]="this.baseService.isRTL?'nameAr':'nameAr'" alignment="center" caption="{{'item.name' | translate}}"></dxi-column>
+                      <dxi-column [dataField]="this.baseService.isRTL?'nameAr':'nameEn'" alignment="center" caption="{{'item.name' | translate}}"></dxi-column>
       
                         <dxi-column dataField="categoryId"  caption="{{'item.Category' | translate}}"  alignment="center">
                           <dxo-lookup [dataSource]="categories" [class]="this.baseService.isRTL? 'text right':'text left'" [displayExpr]="this.baseService.isRTL? 'nameAr':'nameEn'" valueExpr="id">

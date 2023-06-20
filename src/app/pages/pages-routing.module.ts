@@ -26,6 +26,14 @@ import { CategoriesResolver, CategoryResolver } from '../core/resolvers/st/categ
 import { ItemResolver, ItemsResolver } from '../core/resolvers/st/item.resolver';
 import { BrandsResolver } from '../core/resolvers/st/brand.resolver';
 import { UserTypesResolver } from '../core/resolvers/sc/userType.resolver';
+import { ReservationSettingComponent } from './mainData/reservation-setting/reservation-setting.component';
+import { ReservationTypesResolver } from '../core/resolvers/bs/reservationType.resolver';
+import { CompanyComponent } from './mainData/company/company.component';
+import { CountriesResolver } from '../core/resolvers/ad/country.resolver';
+import { citiesResolver } from '../core/resolvers/ad/city.resolver';
+import { CompaniesResolver } from '../core/resolvers/ad/company.resolver';
+import { ItemPriceComponent } from './mainData/item-price/item-price.component';
+import { ItemPricesResolver } from '../core/resolvers/st/itemPrice.resolver';
 
 
 const routes: Routes = [
@@ -79,6 +87,42 @@ const routes: Routes = [
     resolve:{
       categories:CategoriesResolver,
       item:ItemResolver,
+      items:ItemsResolver
+    }
+  },
+  {
+    path:'reservSettings',
+    component:ReservationSettingComponent,
+    data:{
+      title:'ReservSetting',
+      breadcrumb: 'ReservSetting'
+    },
+    resolve:{
+      users:UsersResolver,
+      itemsDataSource:ReservationTypesResolver
+    }
+  },
+  {
+    path:'company',
+    component:CompanyComponent,
+    data:{
+      title:'Companies'
+    },
+    resolve:{
+      companies: CompaniesResolver,
+      countires: CountriesResolver,
+      cities:citiesResolver
+    }
+  },
+  {
+    path:'itemPrice',
+    component:ItemPriceComponent,
+    data:{
+
+    },
+    resolve:{
+      itemPrices : ItemPricesResolver,
+      companies: CompaniesResolver ,
       items:ItemsResolver
     }
   },

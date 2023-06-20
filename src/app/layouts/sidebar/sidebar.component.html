@@ -48,12 +48,12 @@
 
 
             <li>
-              <a *ngIf="hasItems(item)" href="javascript:void(0);" class="is-parent">
-                <i class="{{item.icon}}" *ngIf="item.icon"></i>
+              <a *ngIf="hasItems(item)" href="javascript:void(0);" class="is-parent" >
+                <i class="{{item.icon}}" *ngIf="item.icon" ></i>
                 <span> {{this.baseService.isRTL? item.nameAr: item.nameEn | translate}}</span>
               </a> 
 
-              <a  *ngIf="!hasItems(item)" class="side-nav-link-ref" routerLinkActive="active">
+              <a  *ngIf="!hasItems(item)" class="side-nav-link-ref"  [routerLink]="item.path">
                 <i class="{{ item.icon }}" *ngIf="item.icon"></i>
                 <span> {{this.baseService.isRTL? item.nameAr: item.nameEn | translate}}</span>
               </a>

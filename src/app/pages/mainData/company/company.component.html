@@ -7,18 +7,18 @@
               <div class="card-body">
                 <span>
                   <i class="mdi mdi-account-group"></i>
-                  <h4 class="card-title mb-2">{{"Brands" | translate}}</h4>
+                  <h4 class="card-title mb-2">{{"Companies" | translate}}</h4>
                 </span>
                 <div class="col-lg-12">
                   <div class="button-items">
                     <div #headerActions>
-                      <button type="button" class="btn btn-success" accessKey="add" (click)="addBrand()">
+                      <button type="button" class="btn btn-success" accessKey="add" (click)="addCompany()">
                         <i class=" fa fa-plus"></i> {{'add' | translate}}
                       </button>
-                      <button type="button" class="btn btn-info" accessKey="edit" [disabled]="this.brandId===0" (click)="this.popBrand=true">
+                      <button type="button" class="btn btn-info" accessKey="edit" [disabled]="this.companyId===0" (click)="this.popBrand=true">
                         <i class=" fa fa-edit"></i> {{'edit' | translate}}
                       </button>
-                      <button type="button" class="btn btn-danger" accessKey="delete" [disabled]="this.brandId===0" (click)="deleteBrand()">
+                      <button type="button" class="btn btn-danger" accessKey="delete" [disabled]="this.companyId===0" (click)="deleteBrand()">
                         <i class=" fa fa-trash"></i> {{'delete' | translate}}
                       </button>
                     </div>
@@ -28,7 +28,7 @@
                   <div class="col-lg-12">
                     <form class="form">
                       <div class="card-body">
-                        <dx-data-grid #gridBranches id="gridBranches" [dataSource]="brands" keyExpr="id" [showBorders]="true"
+                        <dx-data-grid #gridBranches id="gridBranches" [dataSource]="companies" keyExpr="id" [showBorders]="true"
                         [showRowLines]="true" [rtlEnabled]="this.baseService.isRTL" [allowColumnReordering]="true"
                         [allowColumnResizing]="true" [columnAutoWidth]="true" [columnHidingEnabled]="true"
                          [height]="height"
@@ -45,9 +45,13 @@
                         <dxo-header-filter [visible]="true"></dxo-header-filter>
                         <dxo-export [enabled]="true" fileName="Data" [allowExportSelectedData]="false"></dxo-export>
                         <dxi-column [dataField]="this.baseService.isRTL?'nameAr':'nameEn'" alignment="center" caption="{{'name' | translate}}"></dxi-column>
-                        <dxi-column dataField="categoryId"  caption="{{'item.Category' | translate}}"  alignment="center">
-                          <dxo-lookup [dataSource]="categories" [class]="this.baseService.isRTL? 'text right':'text left'" [displayExpr]="this.baseService.isRTL? 'nameAr':'nameEn'" valueExpr="id">
+                        <dxi-column dataField="countryId"  caption="{{'Country' | translate}}"  alignment="center">
+                          <dxo-lookup [dataSource]="countires" [class]="this.baseService.isRTL? 'text right':'text left'" [displayExpr]="this.baseService.isRTL? 'nameAr':'nameEn'" valueExpr="id">
                           </dxo-lookup>
+                        </dxi-column>
+                        <dxi-column dataField="phone"  caption="{{'phone' | translate}}"  alignment="center">                        
+                          </dxi-column>
+                          <dxi-column dataField="mobile"  caption="{{'mobile' | translate}}"  alignment="center">                        
                         </dxi-column>
                         <dxi-column dataField="description" alignment="center" caption="{{'description' | translate}}" ></dxi-column>
         
@@ -60,21 +64,33 @@
                       </div>
                     </form>
                   </div>
-                  <dx-popup [rtlEnabled]="this.baseService.isRTL" [visible]="popBrand" [maxWidth]="'65.5%'"
-                    [maxHeight]="'60%'" [showTitle]="true"  title="{{'Category.Category' | translate}}" [dragEnabled]="false" >
+                  <dx-popup [rtlEnabled]="this.baseService.isRTL" [visible]="popBrand" [maxWidth]="'85.5%'" [showCloseButton]="false"
+                    [maxHeight]="'80%'" [showTitle]="true"  title="{{'Category.Category' | translate}}" [dragEnabled]="false" >
                     <dx-scroll-view>
                         <div [style]="this.baseService.isRTL? 'text-align: right;':'text-align: left;'">
                           <form class="form" #editForm="ngForm" id="editForm" class="needs-validation" novalidate>
                             <div class="row">
-                                <div class="col-md-12">
-                                    <label class="label mb-3">{{'Category.mainCate' | translate}}</label>
+                                <div class="col-md-6">
+                                    <label class="label mb-3">{{'Country' | translate}}</label>
                                     <div class="form-value">
-                                        <dx-select-box id="categoryId" name="categoryId" [dataSource]="categories"
+                                        <dx-select-box id="countryId" name="countryId" [dataSource]="countires"
+                                        class="borderStyle" [searchEnabled]="true"
+                                        [rtlEnabled]="this.baseService.isRTL" (onSelectionChanged)="coutrySelectChanged($event)"
+                                        [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
+                                        valueExpr="id" [(ngModel)]="company.countryId" ngModel 
+                                        #countryId="ngModel" [searchEnabled]="true" >
+                                    </dx-select-box>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="label mb-3">{{'city' | translate}}</label>
+                                    <div class="form-value">
+                                        <dx-select-box id="cityId" name="cityId" [dataSource]="cities"
                                         class="borderStyle" [searchEnabled]="true"
                                         [rtlEnabled]="this.baseService.isRTL"
                                         [displayExpr]="this.baseService.isRTL ? 'nameAr':'nameEn'"
-                                        valueExpr="id" [(ngModel)]="brand.categoryId" ngModel 
-                                        #categoryId="ngModel" [searchEnabled]="true" >
+                                        valueExpr="id" [(ngModel)]="company.cityId" ngModel 
+                                        #cityId="ngModel" [searchEnabled]="true" >
                                     </dx-select-box>
                                     </div>
                                 </div>
@@ -85,30 +101,61 @@
                                 <label class="label mb-3">{{'nameAr' | translate}}</label>
                                 <div class="form-value">
                                   <dx-text-box placeholder="{{'nameAr' | translate}}" id="txtnameAr" name="nameAr" ngModel ArabicChar
-                                    required #txtnameAr="ngModel" [(ngModel)]="brand.nameAr"></dx-text-box>
+                                    required #txtnameAr="ngModel" [(ngModel)]="company.nameAr"></dx-text-box>
                                 </div>
                               </div>
                               <div class="col-md-6">
                                 <label class="label mb-3">{{'nameEn' | translate}}</label>
                                 <div class="form-value">
                                   <dx-text-box placeholder="{{'nameEn' | translate}}" id="txtnameEn" name="nameEn" ngModel EnglishChar
-                                    required #txtnameEn="ngModel" [(ngModel)]="brand.nameEn"></dx-text-box>
+                                    required #txtnameEn="ngModel" [(ngModel)]="company.nameEn"></dx-text-box>
                                 </div>
                               </div>
                             </div>
-                            
+                            <div class="row mt-3">
+                              
+                                <div class="col-md-4">
+                                  <label class="label mb-3">{{'security.email' | translate}}</label>
+                                  <div class="form-value">
+                                    <dx-text-box placeholder="{{'security.email' | translate}}" id="txtemail" name="email" ngModel 
+                                       #txtemail="ngModel" [(ngModel)]="company.email"></dx-text-box>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="label mb-3">{{'phone' | translate}}</label>
+                                  <div class="form-value">
+                                    <dx-text-box placeholder="{{'phone' | translate}}" id="txtphone" name="phone" ngModel 
+                                       #txtphone="ngModel" [(ngModel)]="company.phone"></dx-text-box>
+                                  </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="label mb-3">{{'mobile' | translate}}</label>
+                                    <div class="form-value">
+                                      <dx-text-box placeholder="{{'mobile' | translate}}" id="txtmobile" name="mobile" ngModel 
+                                         #txtmobile="ngModel" [(ngModel)]="company.mobile"></dx-text-box>
+                                    </div>
+                                  </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-12 mt-3">
+                                  <label class="label mb-3">{{'address'|translate}}</label>
+                                  <dx-text-area #address="ngModel"
+                                  [height]="60" [(ngModel)]="company.address" name="address" [autoResizeEnabled]="true">
+                                   </dx-text-area>
+                                </div>
+                              </div>
                             <div class="row">
                               <div class="col-md-12 mt-3">
                                 <label class="label mb-3">{{'description'|translate}}</label>
                                 <dx-text-area #discription="ngModel"
-                                [height]="60" [(ngModel)]="brand.description" name="description" [autoResizeEnabled]="true">
+                                [height]="60" [(ngModel)]="company.description" name="description" [autoResizeEnabled]="true">
                                  </dx-text-area>
                               </div>
                             </div>
                           </form>
                           <div class="form-actions mt-5">
                             <div class="button-items">
-                              <button type="submit" form="editForm" class="btn btn-success" [disabled]="!(editForm.valid && editForm.dirty)" (click)="saveBrand()"><i class="fa fa-save mr-3 ml-3"></i>{{'save'|translate}}</button>
+                              <button type="submit" form="editForm" class="btn btn-success" [disabled]="!(editForm.valid && editForm.dirty)" (click)="saveCompany()"><i class="fa fa-save mr-3 ml-3"></i>{{'save'|translate}}</button>
                               <button  class="btn btn-danger"(click)="this.popBrand=false"><i class="ft-x"></i>{{'back'
                                 | translate}}</button>
                             </div>

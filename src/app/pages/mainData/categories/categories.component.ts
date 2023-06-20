@@ -134,7 +134,7 @@ forAddPic:boolean=false;
 
   editCategory(){
     if (this.itemCategoryId == 0)
-      this.alertService.warning('قم باختيار فئة اولاَ');
+    this.alertService.warning(this.translate.instant('selectElementFirst'));
     else {
       this.baseService.blockStart();
       this.itemCategoryService.get(this.itemCategoryId).pipe(takeUntil(this.ngUnsubscribe)).subscribe(
